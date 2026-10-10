@@ -1,0 +1,414 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#faf8f3">
+<meta name="description" content="lyrnox · 花信 — 一个随手搭的小站">
+<title>lyrnox · 花信</title>
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<style>
+  :root{
+    --paper:#faf8f3; --ink:#26262e; --muted:#8f887a; --line:#e7ddcc;
+    --pink:#e78fae; --pink-deep:#cf6390; --blue:#5b7fd6;
+    --serif:"Songti SC","STSong","Noto Serif CJK SC",Georgia,serif;
+    --latin:"Didot","Bodoni MT",Georgia,serif;
+    --sans:-apple-system,BlinkMacSystemFont,"PingFang SC","Hiragino Sans GB","Microsoft YaHei",sans-serif;
+  }
+  *{box-sizing:border-box; -webkit-tap-highlight-color:transparent}
+  html,body{margin:0; padding:0}
+  body{
+    font-family:var(--sans); color:var(--ink); background:var(--paper);
+    min-height:100vh; overflow-x:hidden; -webkit-font-smoothing:antialiased;
+  }
+  /* 纸纹 */
+  body::after{content:""; position:fixed; inset:0; z-index:50; pointer-events:none; opacity:.05;
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)'/%3E%3C/svg%3E");}
+  #petals{position:fixed; inset:0; z-index:0; pointer-events:none}
+  main{position:relative; z-index:1; max-width:620px; margin:0 auto; padding:0 24px 80px}
+
+  /* 眉题 */
+  .masthead{display:flex; justify-content:space-between; align-items:baseline;
+    padding:22px 0 16px; border-bottom:1px solid var(--line);
+    font-size:11px; letter-spacing:.28em; color:var(--muted)}
+  .masthead b{color:var(--ink); font-weight:600}
+
+  /* 主视觉 */
+  .hero{position:relative; padding:88px 0 72px; overflow:visible}
+  .hero .v{position:absolute; right:2px; top:56px; writing-mode:vertical-rl;
+    font-family:var(--serif); font-size:15px; letter-spacing:.9em; color:var(--muted)}
+  .hero .v i{font-style:normal; color:var(--pink-deep)}
+  .hero .kicker{font-size:11px; letter-spacing:.34em; color:var(--muted); margin-bottom:22px}
+  .hero h1{margin:0; font-family:var(--latin); font-style:italic; font-weight:400;
+    font-size:clamp(72px,20vw,124px); line-height:.95; letter-spacing:-.02em}
+  .hero h1 .dot{color:var(--pink-deep)}
+  .hero .sub{margin-top:26px; font-family:var(--serif); font-size:17px; line-height:2.1; color:#4a4a52}
+  .hero .sub em{font-style:normal; color:var(--pink-deep)}
+  .seal{display:inline-grid; place-items:center; width:44px; height:44px; margin-top:30px;
+    border:1px solid var(--pink-deep); border-radius:6px; color:var(--pink-deep);
+    font-family:var(--serif); font-size:20px; transform:rotate(-6deg)}
+
+  /* 章节 */
+  section.block{padding:64px 0 8px; opacity:0; transform:translateY(26px); transition:opacity .9s ease, transform .9s ease}
+  section.block.in{opacity:1; transform:none}
+  .sec-head{display:flex; align-items:baseline; gap:14px; border-bottom:1px solid var(--line); padding-bottom:14px; margin-bottom:34px}
+  .sec-head .no{font-family:var(--latin); font-style:italic; font-size:15px; color:var(--pink-deep)}
+  .sec-head h2{margin:0; font-size:12px; font-weight:600; letter-spacing:.4em; color:var(--muted)}
+
+  /* 时钟 */
+  .time-big{font-family:var(--latin); font-weight:400; font-size:clamp(84px,24vw,132px);
+    letter-spacing:-.03em; line-height:1; font-variant-numeric:tabular-nums}
+  .time-big .sec{font-size:.32em; color:var(--muted); letter-spacing:0}
+  .time-meta{margin-top:18px; display:flex; gap:18px; align-items:baseline; flex-wrap:wrap}
+  .time-meta .date{font-family:var(--serif); font-size:16px}
+  .time-meta .hi{font-size:13px; color:var(--pink-deep); letter-spacing:.1em}
+
+  /* 跑马灯 */
+  .marquee{overflow:hidden; white-space:nowrap; border-top:1px solid var(--line);
+    border-bottom:1px solid var(--line); margin:64px -24px 0; padding:13px 0;
+    font-family:var(--serif); font-size:13px; letter-spacing:.5em; color:var(--muted)}
+  .marquee span{display:inline-block; padding-left:100%; animation:mq 26s linear infinite}
+  @keyframes mq{to{transform:translateX(-100%)}}
+
+  /* 呼吸 */
+  .breath{display:flex; flex-direction:column; align-items:center; gap:26px; padding:14px 0 10px}
+  .ring{width:168px; height:168px; border:1px solid var(--pink-deep); border-radius:50%;
+    display:grid; place-items:center; transition:transform 1.2s cubic-bezier(.4,0,.2,1), border-color 1.2s}
+  .ring span{font-family:var(--serif); font-size:16px; letter-spacing:.5em; text-indent:.5em; color:var(--ink)}
+  .ring.hold{border-color:var(--blue)}
+  .breath .round{font-size:11px; letter-spacing:.32em; text-indent:.32em; color:var(--muted); min-height:15px}
+  .tbtn{background:none; border:none; cursor:pointer; font:inherit; font-size:13px; letter-spacing:.3em; text-indent:.3em;
+    color:var(--ink); padding:10px 6px; border-bottom:1px solid var(--ink)}
+  .tbtn:active{opacity:.5}
+  .tbtn:disabled{opacity:.35}
+
+  /* 一言 */
+  .quote{cursor:pointer; padding:10px 0 6px; min-height:150px}
+  .quote p{margin:0; font-family:var(--serif); font-size:clamp(21px,6vw,27px); line-height:1.9; transition:opacity .35s}
+  .quote .from{margin-top:16px; font-size:12px; letter-spacing:.3em; color:var(--muted); transition:opacity .35s}
+  .quote .hint{margin-top:22px; font-size:11px; letter-spacing:.24em; color:#b6ad9c}
+
+  /* 游戏 */
+  #game{width:100%; height:360px; display:block; touch-action:none; cursor:crosshair;
+    border-top:1px solid var(--line); border-bottom:1px solid var(--line)}
+  .game-bar{display:flex; align-items:center; justify-content:space-between; margin-top:16px}
+  .game-bar .score{font-family:var(--latin); font-size:19px; font-variant-numeric:tabular-nums}
+  .game-bar .score small{font-family:var(--sans); font-size:11px; letter-spacing:.2em; color:var(--muted)}
+  .game-bar .score b{color:var(--pink-deep); font-weight:400}
+  .game-tip{font-size:11px; letter-spacing:.2em; color:var(--muted); margin-top:12px}
+
+  footer{margin-top:90px; border-top:1px solid var(--line); padding-top:22px;
+    display:flex; justify-content:space-between; font-size:11px; letter-spacing:.22em; color:var(--muted)}
+  footer .mk{font-family:var(--serif); font-size:13px; color:var(--pink-deep)}
+
+  @media (prefers-color-scheme: dark){
+    :root{--paper:#16161d; --ink:#ece7da; --muted:#8a8577; --line:#2e2c33}
+    body::after{opacity:.07}
+    .hero .sub{color:#b9b4a6}
+    .tbtn{color:var(--ink); border-color:var(--ink)}
+  }
+  @media (prefers-reduced-motion: reduce){
+    #petals{display:none} .marquee span{animation:none}
+    section.block{opacity:1; transform:none; transition:none}
+  }
+</style>
+</head>
+<body>
+<canvas id="petals"></canvas>
+<main>
+  <div class="masthead"><span><b>LYRNOX</b> · EST. 2026</span><span>花信 · 第二版</span></div>
+
+  <header class="hero">
+    <div class="v">花<i>信</i>有期</div>
+    <div class="kicker">A SMALL SITE, MADE BY HAND</div>
+    <h1>lyrnox<span class="dot">.</span></h1>
+    <p class="sub">花有信，候有期。<br>坐下来，喝杯茶，<em>慢慢</em>看。</p>
+    <div class="seal">印</div>
+  </header>
+
+  <section class="block">
+    <div class="sec-head"><span class="no">01</span><h2>时间</h2></div>
+    <div class="time-big"><span id="hm">--:--</span><span class="sec" id="ss">--</span></div>
+    <div class="time-meta">
+      <span class="date" id="date"></span>
+      <span class="hi" id="hi"></span>
+    </div>
+  </section>
+
+  <div class="marquee"><span>✿ 花开有时 ✿ 落亦有时 ✿ 代码也是 ✿ 慢慢来 ✿ 花开有时 ✿ 落亦有时 ✿ 代码也是 ✿ 慢慢来 ✿&nbsp;</span></div>
+
+  <section class="block">
+    <div class="sec-head"><span class="no">02</span><h2>呼吸</h2></div>
+    <div class="breath">
+      <div class="ring" id="ring"><span id="phase">预备</span></div>
+      <div class="round" id="round"></div>
+      <button class="tbtn" id="breathBtn">开始呼吸</button>
+    </div>
+  </section>
+
+  <section class="block">
+    <div class="sec-head"><span class="no">03</span><h2>一言</h2></div>
+    <div class="quote" id="quoteCard">
+      <p id="qtext"></p>
+      <div class="from" id="qfrom"></div>
+      <div class="hint">— 轻点换一句 —</div>
+    </div>
+  </section>
+
+  <section class="block">
+    <div class="sec-head"><span class="no">04</span><h2>接花瓣 · 三十秒</h2></div>
+    <canvas id="game"></canvas>
+    <div class="game-bar">
+      <div class="score"><b id="gscore">0</b> <small>得点 · 最佳 <span id="gbest">0</span></small></div>
+      <button class="tbtn" id="gstart">开始</button>
+    </div>
+    <div class="game-tip">左右滑动或移动鼠标，接住落下的花瓣</div>
+  </section>
+
+  <footer>
+    <span>© 2026 LYRNOX</span>
+    <span class="mk">花信</span>
+    <span>SET IN SONGTI</span>
+  </footer>
+</main>
+
+<script>
+"use strict";
+/* 入场 */
+document.querySelectorAll('section.block').forEach(s =>
+  new IntersectionObserver((es, o) => es.forEach(e => {
+    if (e.isIntersecting){ e.target.classList.add('in'); o.unobserve(e.target); }
+  }), {threshold:.12}).observe(s));
+
+/* 樱花 */
+(function(){
+  const cv = document.getElementById('petals'), ctx = cv.getContext('2d');
+  if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  let W, H;
+  const size = () => { W = cv.width = innerWidth; H = cv.height = innerHeight; };
+  size(); addEventListener('resize', size);
+  const mk = init => ({ x: Math.random()*W, y: init ? Math.random()*H : -24,
+    s: 5 + Math.random()*9, vy: .35 + Math.random()*.7, ph: Math.random()*6.28,
+    sw: .5 + Math.random()*1.1, rot: Math.random()*6.28, vr: (Math.random()-.5)*.015,
+    a: .28 + Math.random()*.4 });
+  const ps = Array.from({length: 26}, () => mk(true));
+  ctx.shadowColor = 'rgba(231,143,174,.55)';
+  (function tick(){
+    ctx.clearRect(0,0,W,H);
+    ctx.shadowBlur = 12;
+    for (const p of ps){
+      p.y += p.vy; p.ph += .008; p.rot += p.vr;
+      p.x += Math.sin(p.ph) * p.sw * .35;
+      if (p.y > H + 24) Object.assign(p, mk(false));
+      ctx.save(); ctx.translate(p.x, p.y); ctx.rotate(p.rot);
+      ctx.fillStyle = 'rgba(231,143,174,' + p.a + ')';
+      ctx.beginPath();
+      ctx.moveTo(0, -p.s);
+      ctx.bezierCurveTo(p.s*.9, -p.s*.6, p.s*.9, p.s*.5, 0, p.s);
+      ctx.bezierCurveTo(-p.s*.9, p.s*.5, -p.s*.9, -p.s*.6, 0, -p.s);
+      ctx.fill(); ctx.restore();
+    }
+    requestAnimationFrame(tick);
+  })();
+})();
+
+/* 时钟 */
+(function(){
+  const hm = document.getElementById('hm'), ss = document.getElementById('ss'),
+        d = document.getElementById('date'), hi = document.getElementById('hi');
+  const hmf = new Intl.DateTimeFormat('zh-CN',{hour:'2-digit',minute:'2-digit',hour12:false,timeZone:'Asia/Shanghai'});
+  const ssf = new Intl.DateTimeFormat('zh-CN',{second:'2-digit',timeZone:'Asia/Shanghai'});
+  const df = new Intl.DateTimeFormat('zh-CN',{month:'long',day:'numeric',weekday:'long',timeZone:'Asia/Shanghai'});
+  const hf = new Intl.DateTimeFormat('zh-CN',{hour:'numeric',hour12:false,timeZone:'Asia/Shanghai'});
+  const his = [[5,'夜深了'],[9,'早安'],[12,'上午好'],[14,'午安'],[18,'下午好'],[23,'晚上好'],[24,'夜深了']];
+  function hourOf(d){ // zh-CN 下 hour:'numeric' 会带"时"后缀, 用 formatToParts 取纯数字
+    return (+hf.formatToParts(d).find(p => p.type === 'hour').value) % 24;
+  }
+  function upd(){
+    const now = new Date();
+    hm.textContent = hmf.format(now); ss.textContent = ssf.format(now);
+    d.textContent = df.format(now);
+    hi.textContent = '✿ ' + his.find(x => hourOf(now) < x[0])[1];
+  }
+  upd(); setInterval(upd, 1000);
+})();
+
+/* 呼吸 */
+(function(){
+  const ring = document.getElementById('ring'), phase = document.getElementById('phase'),
+        btn = document.getElementById('breathBtn'), round = document.getElementById('round');
+  const seq = [['吸', 4000, 1.45, ''], ['屏息', 4000, 1.45, 'hold'], ['呼', 6000, 1, '']];
+  let timers = [], on = false, n = 0;
+  const clear = () => { timers.forEach(clearTimeout); timers = []; };
+  function stop(){
+    clear(); on = false; n = 0;
+    ring.style.transform = 'scale(1)'; ring.className = 'ring';
+    phase.textContent = '预备'; round.textContent = ''; btn.textContent = '开始呼吸';
+  }
+  function cycle(i){
+    if (!on) return;
+    if (i % 3 === 0){ n++; round.textContent = '第 ' + n + ' 轮'; }
+    const [label, ms, s, cls] = seq[i % 3];
+    phase.textContent = label; ring.className = 'ring ' + cls;
+    ring.style.transition = 'transform ' + ms + 'ms cubic-bezier(.4,0,.2,1), border-color .8s';
+    requestAnimationFrame(() => ring.style.transform = 'scale(' + s + ')');
+    timers.push(setTimeout(() => cycle(i + 1), ms));
+  }
+  btn.onclick = () => on ? stop() : (on = true, btn.textContent = '停下', cycle(0));
+})();
+
+/* 一言 */
+(function(){
+  const qs = [
+    ['明月松间照，清泉石上流。','王维《山居秋暝》'],
+    ['采菊东篱下，悠然见南山。','陶渊明《饮酒》'],
+    ['人间有味是清欢。','苏轼《浣溪沙》'],
+    ['山重水复疑无路，柳暗花明又一村。','陆游《游山西村》'],
+    ['春水碧于天，画船听雨眠。','韦庄《菩萨蛮》'],
+    ['落花人独立，微雨燕双飞。','晏几道《临江仙》'],
+    ['小楼一夜听春雨，深巷明朝卖杏花。','陆游《临安春雨初霁》'],
+    ['云破月来花弄影。','张先《天仙子》'],
+    ['兴尽晚回舟，误入藕花深处。','李清照《如梦令》'],
+    ['人生如逆旅，我亦是行人。','苏轼《临江仙》'],
+    ['长风破浪会有时，直挂云帆济沧海。','李白《行路难》'],
+    ['凌晨四点醒来，发现海棠花未眠。','川端康成'],
+    ['你必须改变你的生活。','里尔克'],
+    ['我步入丛林，因为我希望生活得有意义。','梭罗《瓦尔登湖》'],
+    ['岁月不饶人，我亦未曾饶过岁月。','木心'],
+    ['四方食事，不过一碗人间烟火。','汪曾祺'],
+    ['一个人只拥有此生此世是不够的，他还应该拥有诗意的世界。','王小波'],
+    ['生如夏花之绚烂，死如秋叶之静美。','泰戈尔《飞鸟集》'],
+    ['死并非生的对立面，而是作为生的一部分永存。','村上春树《挪威的森林》'],
+    ['黑夜给了我黑色的眼睛，我却用它寻找光明。','顾城《一代人》'],
+    ['面朝大海，春暖花开。','海子'],
+    ['草在结它的种子，风在摇它的叶子，我们站着，不说话，就十分美好。','顾城《门前》'],
+    ['不要温顺地走进那个良宵。','狄兰·托马斯'],
+    ['流水落花春去也，天上人间。','李煜《浪淘沙》'],
+  ];
+  const t = document.getElementById('qtext'), f = document.getElementById('qfrom'),
+        card = document.getElementById('quoteCard');
+  let last = -1;
+  function next(){
+    let i; do { i = Math.random()*qs.length | 0; } while (i === last);
+    last = i;
+    t.style.opacity = 0; f.style.opacity = 0;
+    setTimeout(() => {
+      t.textContent = '「' + qs[i][0] + '」'; f.textContent = '—— ' + qs[i][1];
+      t.style.opacity = 1; f.style.opacity = 1;
+    }, 260);
+  }
+  card.onclick = next; next();
+})();
+
+/* 接花瓣 */
+(function(){
+  const cv = document.getElementById('game'), ctx = cv.getContext('2d');
+  const scoreEl = document.getElementById('gscore'), bestEl = document.getElementById('gbest'), btn = document.getElementById('gstart');
+  const dark = matchMedia('(prefers-color-scheme: dark)').matches;
+  const INK = dark ? '#ece7da' : '#26262e', PINK = '#e78fae', MUT = '#8f887a';
+  const dpr = Math.min(devicePixelRatio || 1, 2);
+  const BW = 96; // 篮宽
+  let W = 0, H = 0;
+  function size(){
+    const w = cv.clientWidth, h = cv.clientHeight;
+    if (w === W && h === H) return;
+    W = w; H = h; cv.width = W*dpr; cv.height = H*dpr; ctx.setTransform(dpr,0,0,dpr,0,0);
+  }
+  const BK = 'huaxin-best';
+  bestEl.textContent = localStorage.getItem(BK) || 0;
+  let state = 'idle', ps = [], fx = [], bx = 0, score = 0, left = 0, acc = 0, last = 0, isRecord = false;
+  const topY = () => H - 52; // 篮上沿
+  const mk = () => ({ x: 20 + Math.random()*Math.max(W-40, 40), y: -18, s: 7+Math.random()*8,
+    vy: 110+Math.random()*110, ph: Math.random()*6.28, sw: 30+Math.random()*60,
+    rot: Math.random()*6.28, vr: (Math.random()-.5)*3 });
+  function petal(p){
+    ctx.save(); ctx.translate(p.x, p.y); ctx.rotate(p.rot);
+    ctx.fillStyle = PINK;
+    ctx.beginPath();
+    ctx.moveTo(0, -p.s);
+    ctx.bezierCurveTo(p.s*.9, -p.s*.6, p.s*.9, p.s*.5, 0, p.s);
+    ctx.bezierCurveTo(-p.s*.9, p.s*.5, -p.s*.9, -p.s*.6, 0, -p.s);
+    ctx.fill(); ctx.restore();
+  }
+  function basket(){
+    const by = topY();
+    ctx.strokeStyle = INK; ctx.lineWidth = 1.5;
+    ctx.beginPath();
+    if (ctx.roundRect) ctx.roundRect(bx-BW/2, by, BW, 30, 15); else ctx.rect(bx-BW/2, by, BW, 30);
+    ctx.stroke();
+  }
+  function update(dt){
+    if (state === 'playing'){
+      left -= dt; acc += dt;
+      if (acc > .42){ acc = 0; if (ps.length < 24) ps.push(mk()); }
+      if (left <= 0){ finish(); return; }
+    }
+    const top = topY();
+    for (let i = ps.length-1; i >= 0; i--){
+      const p = ps[i];
+      p.y += p.vy*dt; p.ph += dt*2; p.rot += p.vr*dt; p.x += Math.sin(p.ph)*p.sw*dt;
+      if (state === 'playing' && p.y > top-14 && p.y < top+16 && Math.abs(p.x-bx) < BW/2){
+        score++; scoreEl.textContent = score;
+        fx.push({x: p.x, y: p.y, r: 4, a: .8});
+        ps.splice(i,1); continue;
+      }
+      if (p.y > H+24){ ps.splice(i,1); continue; }
+    }
+    for (let i = fx.length-1; i >= 0; i--){
+      const e = fx[i]; e.r += dt*90; e.a -= dt*2.4;
+      if (e.a <= 0) fx.splice(i,1);
+    }
+  }
+  function render(){
+    ctx.clearRect(0,0,W,H);
+    for (const p of ps) petal(p);
+    for (const e of fx){
+      ctx.save(); ctx.globalAlpha = Math.max(e.a, 0);
+      ctx.strokeStyle = PINK; ctx.lineWidth = 1.5;
+      ctx.beginPath(); ctx.arc(e.x, e.y, e.r, 0, 6.29); ctx.stroke(); ctx.restore();
+    }
+    basket();
+    ctx.textAlign = 'center';
+    if (state === 'playing'){
+      ctx.fillStyle = INK; ctx.font = '13px system-ui';
+      ctx.fillText(Math.ceil(left) + 's', bx, H-8);
+    } else if (state === 'idle'){
+      ctx.fillStyle = MUT; ctx.font = '12px system-ui';
+      ctx.fillText('点「开始」，接住三十秒的花期', W/2, H/2);
+    } else {
+      ctx.fillStyle = INK; ctx.font = 'italic 30px Didot, Georgia, serif';
+      ctx.fillText(score + ' petals', W/2, H/2 - 6);
+      ctx.font = '13px system-ui'; ctx.fillStyle = MUT;
+      ctx.fillText(isRecord ? '新纪录' : '点「再来一局」继续', W/2, H/2 + 26);
+    }
+  }
+  function loop(now){
+    size();
+    const dt = Math.min(Math.max((now-last)/1000, 0), .05); last = now;
+    if (W > 10){ update(dt); render(); }
+    requestAnimationFrame(loop);
+  }
+  function move(x){
+    const r = cv.getBoundingClientRect();
+    bx = Math.max(BW/2, Math.min(W-BW/2, x - r.left));
+  }
+  cv.addEventListener('pointermove', e => move(e.clientX));
+  cv.addEventListener('pointerdown', e => move(e.clientX));
+  function finish(){
+    state = 'over';
+    const prev = +(localStorage.getItem(BK) || 0);
+    isRecord = score > prev && score > 0;
+    const best = Math.max(score, prev);
+    localStorage.setItem(BK, best); bestEl.textContent = best;
+    btn.textContent = '再来一局'; btn.disabled = false;
+  }
+  btn.onclick = () => {
+    size(); ps = []; fx = []; score = 0; acc = 0; isRecord = false;
+    scoreEl.textContent = '0'; left = 30; state = 'playing'; bx = W/2;
+    btn.textContent = '进行中'; btn.disabled = true;
+  };
+  requestAnimationFrame(n => { last = n; size(); bx = W/2; requestAnimationFrame(loop); });
+})();
+</script>
+</body>
+</html>
