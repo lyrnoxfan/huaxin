@@ -1,33 +1,54 @@
 # 花信 · huaxin
 
-lyrnox.com 的静态站源码（「lyrnox · 花信」第二版），部署在 Cloudflare Worker 服务 `home`。
+lyrnox.com 的个人主页源码（「lyrnox · 花信」），纯静态，CSS/JS 全内联、零外部资源，部署在 Cloudflare Workers（静态资源模式），服务名 `home`。
 
-## 文件
+## 目录
 
-- `site/index.html` — 主页面，CSS/JS 全内联，零外部资源
-- `site/404.html` — 404 页面
-- `site/favicon.svg` — 图标
-- `site/robots.txt`
-- `gen.py` — 从 `site/` 生成 `worker.js`
-- `deploy-home.py` — 部署到 Cloudflare Worker
-- `worker.js` — 生成产物（部署用的就是这个，别手改）
+```
+site/            网站本体，部署时原样上传
+  index.html     主页（样式与脚本都在里面）
+  404.html       404 页面
+  favicon.svg
+  robots.txt
+  _headers       全站响应头（安全头 / CSP），不会被当作页面公开
+wrangler.toml    Cloudflare 部署配置
+.github/workflows/deploy.yml   推送 main 自动部署
+```
+
+改页面就直接改 `site/` 里的文件，没有构建步骤，也没有生成产物。
 
 ## 本地预览
 
 ```bash
-cd site && python3 -m http.server 8080
+npm run preview          # 纯静态预览：http://localhost:8080
+npm install && npm run dev   # 用 wrangler 预览，行为（404、响应头）与线上一致
 ```
 
-## 重新部署
+## 部署
+
+### 方式一：推送即上线（推荐）
+
+在 GitHub 仓库 Settings → Secrets and variables → Actions 里添加两个 secret：
+
+| 名称 | 内容 |
+| --- | --- |
+| `CLOUDFLARE_API_TOKEN` | Cloudflare API Token（模板选 “Edit Cloudflare Workers”） |
+| `CLOUDFLARE_ACCOUNT_ID` | Cloudflare 账号 ID |
+
+之后每次 push 到 `main` 都会自动部署；也可以在 Actions 页面手动运行。手机上改完文件提交就行。
+
+### 方式二：命令行手动部署
 
 ```bash
-python3 gen.py site worker.js
-python3 deploy-home.py --account 4da041ad422b0c9e0ac5f6a7b3bafeea
+npm install
+npx wrangler login      # 首次
+npm run deploy
 ```
 
-部署后清掉 Cloudflare 上 lyrnox.com zone 的缓存（`/`、`/index.html`、`/404.html`、`/favicon.svg`、`/robots.txt`），否则边缘会吐旧页面：
+### 不需要手动清缓存
 
-```
-POST /client/v4/zones/9512b0934e802b5924da512c85260dcd/purge_cache
-{"files":["https://lyrnox.com/","https://lyrnox.com/index.html","https://lyrnox.com/404.html","https://lyrnox.com/favicon.svg","https://lyrnox.com/robots.txt"]}
-```
+静态资源每个文件都带 ETag，并且默认 `must-revalidate`，浏览器和边缘每次都会校验，部署完立刻看到新版本。
+
+## 域名
+
+如果 lyrnox.com 已经在 Cloudflare 面板里绑定到 `home`，什么都不用动。想用配置文件管理，就取消 `wrangler.toml` 里 `routes` 的注释。

@@ -6,6 +6,13 @@
 <meta name="theme-color" content="#faf8f3">
 <meta name="description" content="lyrnox 的独立个人主页，展示正在制作的项目、技术方向与常用入口。">
 <title>lyrnox · 花信</title>
+<link rel="canonical" href="https://lyrnox.com/">
+<meta property="og:type" content="website">
+<meta property="og:title" content="lyrnox · 花信">
+<meta property="og:description" content="lyrnox 的独立个人主页，展示正在制作的项目、技术方向与常用入口。">
+<meta property="og:url" content="https://lyrnox.com/">
+<meta property="og:locale" content="zh_CN">
+<meta name="twitter:card" content="summary">
 <link rel="icon" href="/favicon.svg" type="image/svg+xml">
 <style>
   :root{
@@ -99,6 +106,7 @@
   .quote{cursor:pointer; padding:10px 0 6px; min-height:150px}
   .quote p{margin:0; font-family:var(--serif); font-size:clamp(21px,6vw,27px); line-height:1.9; transition:opacity .35s}
   .quote .from{margin-top:16px; font-size:12px; letter-spacing:.3em; color:var(--muted); transition:opacity .35s}
+  .quote:focus-visible{outline:2px solid var(--pink-deep); outline-offset:6px}
   .quote .hint{margin-top:22px; font-size:11px; letter-spacing:.24em; color:#b6ad9c}
 
   /* 游戏 */
@@ -125,6 +133,7 @@
     section.block{opacity:1; transform:none; transition:none}
   }
 </style>
+<noscript><style>section.block{opacity:1; transform:none}</style></noscript>
 </head>
 <body>
 <canvas id="petals"></canvas>
@@ -184,7 +193,7 @@
 
   <section class="block">
     <div class="sec-head"><span class="no">04</span><h2>读到的句子</h2></div>
-    <div class="quote" id="quoteCard">
+    <div class="quote" id="quoteCard" role="button" tabindex="0">
       <p id="qtext"></p>
       <div class="from" id="qfrom"></div>
       <div class="hint">— 轻点换一句 —</div>
@@ -193,7 +202,7 @@
 
   <section class="block">
     <div class="sec-head"><span class="no">05</span><h2>接花瓣 · 三十秒</h2></div>
-    <canvas id="game"></canvas>
+    <canvas id="game" role="img" aria-label="接花瓣小游戏：左右移动篮子，接住落下的花瓣"></canvas>
     <div class="game-bar">
       <div class="score"><b id="gscore">0</b> <small>得点 · 最佳 <span id="gbest">0</span></small></div>
       <button class="tbtn" id="gstart">开始</button>
@@ -228,9 +237,10 @@ document.querySelectorAll('section.block').forEach(s =>
     sw: .5 + Math.random()*1.1, rot: Math.random()*6.28, vr: (Math.random()-.5)*.015,
     a: .28 + Math.random()*.4 });
   const ps = Array.from({length: 26}, () => mk(true));
-  ctx.shadowColor = 'rgba(231,143,174,.55)';
   (function tick(){
     ctx.clearRect(0,0,W,H);
+    // 改变画布尺寸会重置绘图状态，所以光晕参数每帧重设
+    ctx.shadowColor = 'rgba(231,143,174,.55)';
     ctx.shadowBlur = 12;
     for (const p of ps){
       p.y += p.vy; p.ph += .008; p.rot += p.vr;
@@ -311,15 +321,18 @@ document.querySelectorAll('section.block').forEach(s =>
       t.style.opacity = 1; f.style.opacity = 1;
     }, 260);
   }
-  card.onclick = next; next();
+  card.onclick = next;
+  card.onkeydown = e => { if (e.key === 'Enter' || e.key === ' '){ e.preventDefault(); next(); } };
+  next();
 })();
 
 /* 接花瓣 */
 (function(){
   const cv = document.getElementById('game'), ctx = cv.getContext('2d');
   const scoreEl = document.getElementById('gscore'), bestEl = document.getElementById('gbest'), btn = document.getElementById('gstart');
-  const dark = matchMedia('(prefers-color-scheme: dark)').matches;
-  const INK = dark ? '#ece7da' : '#26262e', PINK = '#e78fae', MUT = '#8f887a';
+  const darkMQ = matchMedia('(prefers-color-scheme: dark)');
+  const ink = () => darkMQ.matches ? '#ece7da' : '#26262e';
+  const PINK = '#e78fae', MUT = '#8f887a';
   const dpr = Math.min(devicePixelRatio || 1, 2);
   const BW = 96; // 篮宽
   let W = 0, H = 0;
@@ -329,7 +342,11 @@ document.querySelectorAll('section.block').forEach(s =>
     W = w; H = h; cv.width = W*dpr; cv.height = H*dpr; ctx.setTransform(dpr,0,0,dpr,0,0);
   }
   const BK = 'huaxin-best';
-  bestEl.textContent = localStorage.getItem(BK) || 0;
+  const store = {
+    get(){ try { return +localStorage.getItem(BK) || 0; } catch(e){ return 0; } },
+    set(v){ try { localStorage.setItem(BK, v); } catch(e){} }
+  };
+  bestEl.textContent = store.get();
   let state = 'idle', ps = [], fx = [], bx = 0, score = 0, left = 0, acc = 0, last = 0, isRecord = false;
   const topY = () => H - 52; // 篮上沿
   const mk = () => ({ x: 20 + Math.random()*Math.max(W-40, 40), y: -18, s: 7+Math.random()*8,
@@ -346,7 +363,7 @@ document.querySelectorAll('section.block').forEach(s =>
   }
   function basket(){
     const by = topY();
-    ctx.strokeStyle = INK; ctx.lineWidth = 1.5;
+    ctx.strokeStyle = ink(); ctx.lineWidth = 1.5;
     ctx.beginPath();
     if (ctx.roundRect) ctx.roundRect(bx-BW/2, by, BW, 30, 15); else ctx.rect(bx-BW/2, by, BW, 30);
     ctx.stroke();
@@ -384,22 +401,24 @@ document.querySelectorAll('section.block').forEach(s =>
     basket();
     ctx.textAlign = 'center';
     if (state === 'playing'){
-      ctx.fillStyle = INK; ctx.font = '13px system-ui';
+      ctx.fillStyle = ink(); ctx.font = '13px system-ui';
       ctx.fillText(Math.ceil(left) + 's', bx, H-8);
     } else if (state === 'idle'){
       ctx.fillStyle = MUT; ctx.font = '12px system-ui';
       ctx.fillText('点「开始」，接住三十秒的花期', W/2, H/2);
     } else {
-      ctx.fillStyle = INK; ctx.font = 'italic 30px Didot, Georgia, serif';
+      ctx.fillStyle = ink(); ctx.font = 'italic 30px Didot, Georgia, serif';
       ctx.fillText(score + ' petals', W/2, H/2 - 6);
       ctx.font = '13px system-ui'; ctx.fillStyle = MUT;
       ctx.fillText(isRecord ? '新纪录' : '点「再来一局」继续', W/2, H/2 + 26);
     }
   }
+  let visible = true;
+  new IntersectionObserver(es => { visible = es[0].isIntersecting; }).observe(cv);
   function loop(now){
     size();
     const dt = Math.min(Math.max((now-last)/1000, 0), .05); last = now;
-    if (W > 10){ update(dt); render(); }
+    if (visible && W > 10){ update(dt); render(); } // 离屏时不更新，游戏计时也随之暂停
     requestAnimationFrame(loop);
   }
   function move(x){
@@ -410,10 +429,10 @@ document.querySelectorAll('section.block').forEach(s =>
   cv.addEventListener('pointerdown', e => move(e.clientX));
   function finish(){
     state = 'over';
-    const prev = +(localStorage.getItem(BK) || 0);
+    const prev = store.get();
     isRecord = score > prev && score > 0;
     const best = Math.max(score, prev);
-    localStorage.setItem(BK, best); bestEl.textContent = best;
+    store.set(best); bestEl.textContent = best;
     btn.textContent = '再来一局'; btn.disabled = false;
   }
   btn.onclick = () => {

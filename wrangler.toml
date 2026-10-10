@@ -1,0 +1,12 @@
+# lyrnox.com 主页 —— Cloudflare Workers 静态资源部署（无需自写 Worker 代码）
+name = "home"
+compatibility_date = "2026-10-01"
+
+[assets]
+directory = "./site"
+# 未知路径返回 site/404.html，并带 404 状态码
+not_found_handling = "404-page"
+
+# 域名绑定：如果 lyrnox.com 已经在 Cloudflare 面板里绑给了 `home`，保持注释即可。
+# 想让配置文件接管，就取消注释（需要 lyrnox.com 在你的 Cloudflare 账号下）：
+# routes = [{ pattern = "lyrnox.com", custom_domain = true }]

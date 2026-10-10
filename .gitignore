@@ -1,6 +1,9 @@
+node_modules/
+.wrangler/
+.dev.vars
+.DS_Store
 site-old-20261009/
 worker-old-20261009.js
 backup-20261009-homepage.html
 huaxin-source.zip
-README-SOURCE.md
 __pycache__/
