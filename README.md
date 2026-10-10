@@ -1,6 +1,6 @@
-# 桜流 · huaxin
+# 一枝樱 · huaxin
 
-lyrnox.com 的视觉小站源码（「lyrnox · 桜流」—— 一场挂在网上的樱吹雪），纯静态，CSS/JS 全内联、零外部资源，部署在 Cloudflare Workers（静态资源模式），服务名 `home`。
+lyrnox.com 的视觉小站源码（「lyrnox · 一枝樱」—— 留白），纯静态，CSS/JS 全内联、零外部资源，部署在 Cloudflare Workers（静态资源模式），服务名 `home`。
 
 ## 目录
 

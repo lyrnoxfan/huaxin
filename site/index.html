@@ -3,258 +3,185 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="theme-color" content="#232450">
-<meta name="description" content="桜流 — 一场挂在网上的樱吹雪">
-<title>lyrnox · 桜流</title>
+<meta name="theme-color" content="#faf8f3">
+<meta name="description" content="一枝樱 — 留白">
+<title>lyrnox · 一枝樱</title>
 <link rel="icon" href="/favicon.svg" type="image/svg+xml">
 <style>
-  *{margin:0; padding:0; box-sizing:border-box}
-  html,body{height:100%; overflow:hidden; background:#1b1c3f}
-  body{
-    font-family:Didot,"Bodoni MT",Georgia,"Songti SC",serif;
-    -webkit-font-smoothing:antialiased;
-    animation:enter 2.4s ease both;
-    cursor:crosshair;
+  :root{
+    --paper:#faf8f3; --ink:#2b2b33; --muted:#98917f;
+    --serif:"Songti SC","STSong","Noto Serif CJK SC",Georgia,serif;
+    --sans:-apple-system,BlinkMacSystemFont,"PingFang SC","Hiragino Sans GB","Microsoft YaHei",sans-serif;
   }
+  *{margin:0; padding:0; box-sizing:border-box}
+  html,body{height:100%; overflow:hidden; background:var(--paper)}
+  body{font-family:var(--sans); color:var(--ink); -webkit-font-smoothing:antialiased;
+    animation:enter 2s ease both}
   @keyframes enter{from{opacity:0} to{opacity:1}}
-  #sky{position:fixed; inset:0; width:100%; height:100%; display:block}
-  .vignette{position:fixed; inset:0; pointer-events:none; z-index:3;
-    background:radial-gradient(ellipse at 50% 42%, transparent 52%, rgba(10,8,28,.42) 100%)}
-  .grain{position:fixed; inset:0; pointer-events:none; z-index:4; opacity:.07; mix-blend-mode:overlay;
+
+  .paper{position:fixed; inset:0; z-index:0; pointer-events:none; opacity:.05;
     background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)'/%3E%3C/svg%3E")}
-  .wordmark{position:fixed; z-index:5; left:26px; bottom:24px;
-    font-style:italic; font-size:17px; letter-spacing:.32em; color:rgba(255,240,246,.85)}
-  .wordmark small{font-style:normal; font-family:-apple-system,"PingFang SC",sans-serif;
-    font-size:10px; letter-spacing:.42em; color:rgba(255,240,246,.42); margin-left:12px}
-  .vtext{position:fixed; z-index:5; right:30px; top:50%; transform:translateY(-50%);
-    writing-mode:vertical-rl; font-family:"Songti SC","STSong",serif;
-    font-size:15px; letter-spacing:1.1em; color:rgba(255,240,246,.34)}
-  .hint{position:fixed; z-index:5; left:50%; bottom:26px; transform:translateX(-50%);
-    font-family:-apple-system,"PingFang SC",sans-serif; font-size:11px; letter-spacing:.3em;
-    color:rgba(255,240,246,.5); white-space:nowrap;
-    animation:hintfade 1.2s ease 6s forwards}
-  @keyframes hintfade{to{opacity:0}}
+
+  .mark{position:fixed; z-index:3; left:50%; top:44%; transform:translate(-50%,-50%);
+    font-family:var(--serif); font-size:52vmin; line-height:1; color:var(--ink); opacity:.045;
+    pointer-events:none; user-select:none}
+
+  #branch{position:fixed; inset:0; z-index:1; width:100%; height:100%; display:block}
+  #branch .sway{transform-box:fill-box; transform-origin:82% 96%;
+    animation:sway 9s ease-in-out infinite}
+  @keyframes sway{0%,100%{transform:rotate(-.5deg)} 50%{transform:rotate(.7deg)}}
+
+  #petals{position:fixed; inset:0; z-index:2; pointer-events:none}
+
+  .top{position:fixed; z-index:4; top:26px; left:28px;
+    font-size:12px; letter-spacing:.42em; color:var(--ink)}
+  .top span{color:var(--muted); letter-spacing:.3em; margin-left:14px; font-size:10px}
+
+  .foot{position:fixed; z-index:4; left:28px; bottom:30px}
+  .foot h1{font-family:var(--serif); font-weight:400; font-size:30px; letter-spacing:.28em; margin-bottom:12px}
+  .foot p{font-size:10px; letter-spacing:.34em; color:var(--muted)}
+
+  .seal{position:fixed; z-index:4; right:28px; bottom:30px;
+    width:40px; height:40px; display:grid; place-items:center;
+    border:1px solid #cf6390; border-radius:5px; color:#cf6390;
+    font-family:var(--serif); font-size:19px; transform:rotate(-5deg); opacity:.85}
+
   @media (prefers-reduced-motion: reduce){
-    #sky{display:none}
-    body{background:linear-gradient(180deg,#232450,#b4638f 70%,#ffd9b8); animation:none}
-    .hint{display:none}
+    #branch .sway{animation:none}
+    #petals{display:none}
+    body{animation:none}
   }
 </style>
 </head>
 <body>
-<canvas id="sky"></canvas>
-<div class="vignette"></div>
-<div class="grain"></div>
-<div class="wordmark">lyrnox<small>SAKURA&nbsp;DRIFT</small></div>
-<div class="vtext">桜流</div>
-<div class="hint" id="hint">移动搅动风 · 轻点爆开花瓣</div>
-<noscript><style>.hint{display:none}</style></noscript>
+<div class="paper"></div>
+<div class="mark">桜</div>
+
+<svg id="branch" viewBox="0 0 800 1200" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+  <defs>
+    <radialGradient id="petalG" cx="50%" cy="35%" r="78%">
+      <stop offset="0%" stop-color="#ffffff"/>
+      <stop offset="55%" stop-color="#ffe4ed"/>
+      <stop offset="100%" stop-color="#f4a8c4"/>
+    </radialGradient>
+    <radialGradient id="budG" cx="50%" cy="40%" r="72%">
+      <stop offset="0%" stop-color="#ffd9e6"/>
+      <stop offset="100%" stop-color="#ec8cae"/>
+    </radialGradient>
+    <g id="blossom">
+      <g>
+        <ellipse cx="0" cy="-14" rx="12" ry="16" fill="url(#petalG)"/>
+        <ellipse cx="0" cy="-14" rx="12" ry="16" fill="url(#petalG)" transform="rotate(72)"/>
+        <ellipse cx="0" cy="-14" rx="12" ry="16" fill="url(#petalG)" transform="rotate(144)"/>
+        <ellipse cx="0" cy="-14" rx="12" ry="16" fill="url(#petalG)" transform="rotate(216)"/>
+        <ellipse cx="0" cy="-14" rx="12" ry="16" fill="url(#petalG)" transform="rotate(288)"/>
+      </g>
+      <g stroke="#d9a441" stroke-width="1.4" stroke-linecap="round">
+        <line x1="0" y1="3" x2="-4" y2="-8"/><line x1="0" y1="3" x2="4" y2="-8"/>
+        <line x1="0" y1="3" x2="-7" y2="-3"/><line x1="0" y1="3" x2="7" y2="-3"/>
+        <line x1="0" y1="3" x2="0" y2="-10"/>
+      </g>
+      <circle cx="0" cy="-9" r="2.6" fill="#f2c14e"/>
+      <circle cx="-4" cy="-7" r="1.7" fill="#f6cf6b"/>
+      <circle cx="4" cy="-7" r="1.7" fill="#f6cf6b"/>
+    </g>
+    <g id="bud">
+      <ellipse cx="0" cy="0" rx="7" ry="10" fill="url(#budG)"/>
+      <path d="M-7 3 Q0 9 7 3" stroke="#c9759a" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+    </g>
+  </defs>
+  <g class="sway" stroke="#453a32" stroke-linecap="round" fill="none">
+    <path d="M730 1190 C660 1020 580 900 480 760" stroke-width="17"/>
+    <path d="M480 760 C410 640 350 540 310 420" stroke-width="10"/>
+    <path d="M480 760 C560 660 610 580 645 460" stroke-width="8"/>
+    <path d="M395 585 C330 530 270 490 205 455" stroke-width="6"/>
+    <path d="M560 640 C600 610 630 590 655 560" stroke-width="4"/>
+    <path d="M340 480 C300 450 270 430 245 400" stroke-width="4"/>
+    <path d="M610 520 C640 500 660 485 675 465" stroke-width="3.5"/>
+  </g>
+  <g class="sway">
+    <use href="#blossom" transform="translate(310 420) rotate(10) scale(1.7)"/>
+    <use href="#blossom" transform="translate(255 475) rotate(-20) scale(1.15)"/>
+    <use href="#blossom" transform="translate(365 375) rotate(30) scale(1.0)"/>
+    <use href="#blossom" transform="translate(645 460) rotate(-15) scale(1.6)"/>
+    <use href="#blossom" transform="translate(600 525) rotate(40) scale(1.1)"/>
+    <use href="#blossom" transform="translate(205 455) rotate(0) scale(1.35)"/>
+    <use href="#blossom" transform="translate(480 760) rotate(-30) scale(1.2)"/>
+    <use href="#blossom" transform="translate(545 685) rotate(15) scale(0.9)"/>
+    <use href="#blossom" transform="translate(430 800) rotate(50) scale(0.85)"/>
+    <use href="#bud" transform="translate(580 605) rotate(20)"/>
+    <use href="#bud" transform="translate(420 505) rotate(-30) scale(1.1)"/>
+    <use href="#bud" transform="translate(250 525) rotate(10) scale(0.9)"/>
+    <use href="#bud" transform="translate(675 525) rotate(-10)"/>
+    <use href="#bud" transform="translate(330 350) rotate(30) scale(1.05)"/>
+    <use href="#bud" transform="translate(690 480) rotate(-40) scale(0.85)"/>
+  </g>
+</svg>
+
+<canvas id="petals"></canvas>
+
+<header class="top">lyrnox<span>EST. 2026</span></header>
+<footer class="foot">
+  <h1>一枝樱</h1>
+  <p>ONE BRANCH, ENOUGH SPRING</p>
+</footer>
+<div class="seal">桜</div>
+
 <script>
 "use strict";
 (function(){
-  const cv = document.getElementById('sky'), ctx = cv.getContext('2d');
-  const TAU = Math.PI * 2;
+  if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  const cv = document.getElementById('petals'), ctx = cv.getContext('2d');
   const dpr = Math.min(devicePixelRatio || 1, 2);
-  let W = 0, H = 0;
+  let W, H;
   function size(){
     W = innerWidth; H = innerHeight;
     cv.width = W * dpr; cv.height = H * dpr;
     ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-    buildSky();
   }
+  size(); addEventListener('resize', size);
 
-  /* ---------- 天空: 慢变的黄昏渐变 ---------- */
-  const skyC = document.createElement('canvas');
-  const stops = [ // [位置, 基色]
-    [0.00, [35, 36, 80]], [0.34, [74, 58, 110]], [0.58, [150, 80, 130]],
-    [0.78, [214, 120, 138]], [0.92, [247, 178, 150]], [1.00, [255, 217, 184]],
-  ];
-  function buildSky(){
-    skyC.width = 2; skyC.height = Math.max(H, 2);
-    const g = skyC.getContext('2d');
-    const gr = g.createLinearGradient(0, 0, 0, skyC.height);
-    for (const [p, c] of stops) gr.addColorStop(p, `rgb(${c[0]},${c[1]},${c[2]})`);
-    g.fillStyle = gr; g.fillRect(0, 0, 2, skyC.height);
-  }
-  // 颜色随时间极慢漂移(周期约 3 分钟,几乎察觉不到,但"挂着"时是活的)
-  function skyTint(t){
-    const k = Math.sin(t * 0.00035);
-    return `rgba(${120 + k * 22 | 0},${70 + k * 12 | 0},${140 + k * 18 | 0},0.10)`;
-  }
-
-  /* ---------- 预渲染精灵 ---------- */
-  function petalSprite(px, tone, blur){
-    const c = document.createElement('canvas');
-    c.width = c.height = px;
-    const x = c.getContext('2d'), s = px / 2;
-    x.translate(s, s);
-    if (blur) x.filter = `blur(${blur}px)`;
-    const g = x.createLinearGradient(-s * .5, -s, s * .5, s);
-    g.addColorStop(0, '#ffffff'); g.addColorStop(.45, tone); g.addColorStop(1, tone);
-    x.fillStyle = g;
-    x.beginPath();
-    x.moveTo(0, -s * .92);
-    x.bezierCurveTo(s * .82, -s * .55, s * .72, s * .42, 0, s * .92);
-    x.bezierCurveTo(-s * .72, s * .42, -s * .82, -s * .55, 0, -s * .92);
-    x.fill();
-    return c;
-  }
-  function glowSprite(px, rgb){
-    const c = document.createElement('canvas');
-    c.width = c.height = px;
-    const x = c.getContext('2d');
-    const g = x.createRadialGradient(px/2, px/2, 0, px/2, px/2, px/2);
-    g.addColorStop(0, `rgba(${rgb},.85)`); g.addColorStop(.4, `rgba(${rgb},.32)`); g.addColorStop(1, `rgba(${rgb},0)`);
-    x.fillStyle = g; x.fillRect(0, 0, px, px);
-    return c;
-  }
-  const tones = ['#ffd9e6', '#f7aec9', '#ef8fb4', '#ffffff'];
-  const sprites = tones.map(t => petalSprite(64, t, 0));
-  const spritesSoft = tones.map(t => petalSprite(64, t, 3)); // 远景柔焦
-  const moonGlow = glowSprite(320, '255,236,220');
-  const pinkGlow = glowSprite(420, '255,150,190');
-
-  /* ---------- 星 ---------- */
-  let stars = [];
-  function buildStars(){
-    stars = [];
-    const n = Math.floor(W * H / 16000);
-    for (let i = 0; i < n; i++) stars.push({
-      x: Math.random() * W, y: Math.random() * H * .5,
-      r: .4 + Math.random() * 1.1, ph: Math.random() * TAU, sp: .5 + Math.random() * 1.5,
-    });
-  }
-
-  /* ---------- 花瓣 ---------- */
   const rnd = (a, b) => a + Math.random() * (b - a);
-  let far = [], mid = [], near = [], burst = [];
-  function mkPetal(layer){
-    const cfg = layer === 0 ? { s: [2, 5],  a: [.14, .38], v: [6, 16] }
-              : layer === 1 ? { s: [6, 17], a: [.45, .92], v: [14, 34] }
-              :               { s: [30, 72], a: [.07, .16], v: [40, 90] };
-    return {
-      x: rnd(-60, W + 60), y: rnd(-60, H + 60),
-      s: rnd(cfg.s[0], cfg.s[1]), a: rnd(cfg.a[0], cfg.a[1]),
-      vy: rnd(cfg.v[0], cfg.v[1]), ph: rnd(0, TAU),
-      sw: rnd(.4, 1.4), rot: rnd(0, TAU), vr: rnd(-.9, .9),
-      sp: sprites[Math.random() * sprites.length | 0],
-      spSoft: spritesSoft[Math.random() * spritesSoft.length | 0],
-      layer,
-    };
-  }
-  function seed(){
-    far = []; mid = []; near = []; burst = [];
-    const n0 = Math.floor(W / 14), n1 = Math.floor(W / 9);
-    for (let i = 0; i < n0; i++) far.push(mkPetal(0));
-    for (let i = 0; i < n1; i++) mid.push(mkPetal(1));
-    for (let i = 0; i < 10; i++) near.push(mkPetal(2));
-  }
-
-  /* ---------- 风场 + 鼠标 ---------- */
-  let mx = -9999, my = -9999, gust = 0, lastMove = 0;
-  addEventListener('pointermove', e => {
-    mx = e.clientX; my = e.clientY; lastMove = performance.now(); gust = Math.min(1, gust + .25);
-  }, { passive: true });
-  addEventListener('pointerdown', e => {
-    for (let i = 0; i < 26; i++){
-      const an = rnd(0, TAU), sp = rnd(60, 300);
-      burst.push({ x: e.clientX, y: e.clientY, vx: Math.cos(an) * sp, vy: Math.sin(an) * sp - 40,
-        s: rnd(5, 13), a: rnd(.6, 1), rot: rnd(0, TAU), vr: rnd(-4, 4),
-        life: 0, max: rnd(1.6, 2.8), sp: sprites[Math.random() * sprites.length | 0] });
-    }
-  }, { passive: true });
-
-  function wind(x, y, t, out){
-    const s = Math.sin, c = Math.cos;
-    let wx = 16 + 13 * s(y * .004 + t * .00022) + 7 * s(y * .011 - t * .00013);
-    let wy = 9 + 9 * s(x * .003 - t * .00019) + 5 * c(x * .009 + t * .00016);
-    const dx = x - mx, dy = y - my, R = 230;
-    const d2 = dx * dx + dy * dy;
-    if (d2 < R * R){
-      const d = Math.sqrt(d2) || 1, f = 1 - d / R, g = f * f * gust;
-      wx += (-dy / d) * 110 * g + (dx / d) * 46 * f * gust;
-      wy += (dx / d) * 110 * g + (dy / d) * 46 * f * gust;
-    }
-    out[0] = wx; out[1] = wy;
-  }
-
-  /* ---------- 主循环 ---------- */
-  const wv = [0, 0];
-  let last = 0, moonX = .5, running = true;
+  const tones = ['255,255,255', '255,217,230', '244,168,196'];
+  let ps = [], lastSpawn = 0, last = 0, running = true;
   document.addEventListener('visibilitychange', () => { running = !document.hidden; });
 
-  function drawPetal(p){
-    ctx.save();
-    ctx.translate(p.x, p.y); ctx.rotate(p.rot);
-    ctx.globalAlpha = p.a;
-    const img = p.layer === 0 ? p.spSoft : p.sp;
-    ctx.drawImage(img, -p.s, -p.s, p.s * 2, p.s * 2);
-    ctx.restore();
+  function spawn(now){
+    if (ps.length >= 14 || now - lastSpawn < 2200) return;
+    lastSpawn = now;
+    ps.push({
+      x: rnd(W * .1, W * .9), y: -20,
+      s: rnd(4, 9), vy: rnd(22, 46), ph: rnd(0, 6.28), sw: rnd(.5, 1.3),
+      rot: rnd(0, 6.28), vr: rnd(-1, 1),
+      c: tones[Math.random() * tones.length | 0], a: 0,
+    });
   }
-
   function frame(now){
     requestAnimationFrame(frame);
     if (!running) return;
     const dt = Math.min((now - last) / 1000 || 0, .05); last = now;
-    const t = now;
-    gust *= .986;
-
-    // 天空
-    ctx.drawImage(skyC, 0, 0, W, H);
-    ctx.fillStyle = skyTint(t); ctx.fillRect(0, 0, W, H);
-
-    // 月亮光晕(极慢漂移)
-    moonX = .5 + Math.sin(t * .00003) * .18;
-    const myy = H * .2 + Math.cos(t * .000043) * H * .03;
-    ctx.globalAlpha = .5;
-    ctx.drawImage(moonGlow, moonX * W - 160, myy - 160);
-    ctx.globalAlpha = .30;
-    ctx.drawImage(pinkGlow, W * .78 - 210 + Math.sin(t * .00005) * 30, H * .62 - 210);
-    ctx.globalAlpha = 1;
-
-    // 星
-    ctx.fillStyle = '#fff';
-    for (const st of stars){
-      ctx.globalAlpha = .25 + .35 * (0.5 + 0.5 * Math.sin(st.ph + t * .001 * st.sp));
-      ctx.fillRect(st.x, st.y, st.r, st.r);
-    }
-    ctx.globalAlpha = 1;
-
-    // 花瓣
-    const all = far.concat(mid, near);
-    for (const p of all){
-      wind(p.x, p.y, t, wv);
-      p.x += (wv[0] + Math.sin(p.ph) * p.sw * 22) * dt;
-      p.y += (wv[1] + p.vy * .35 + Math.cos(p.ph * .7) * 8) * dt;
-      p.ph += dt * 1.4; p.rot += p.vr * dt;
-      const m = 90;
-      if (p.x < -m) p.x = W + m; else if (p.x > W + m) p.x = -m;
-      if (p.y < -m) p.y = H + m; else if (p.y > H + m) p.y = -m;
-      drawPetal(p);
-    }
-    // 爆开的花瓣
-    for (let i = burst.length - 1; i >= 0; i--){
-      const b = burst[i];
-      b.life += dt;
-      if (b.life > b.max){ burst.splice(i, 1); continue; }
-      b.vx *= (1 - dt * 1.6); b.vy *= (1 - dt * 1.6); b.vy += dt * 60;
-      b.x += b.vx * dt; b.y += b.vy * dt; b.rot += b.vr * dt;
-      ctx.save(); ctx.translate(b.x, b.y); ctx.rotate(b.rot);
-      ctx.globalAlpha = b.a * (1 - b.life / b.max);
-      ctx.drawImage(b.sp, -b.s, -b.s, b.s * 2, b.s * 2);
+    spawn(now);
+    ctx.clearRect(0, 0, W, H);
+    for (let i = ps.length - 1; i >= 0; i--){
+      const p = ps[i];
+      p.y += p.vy * dt; p.ph += dt * 1.2; p.rot += p.vr * dt;
+      p.x += Math.sin(p.ph) * p.sw * 26 * dt;
+      p.a = Math.min(.85, p.a + dt * .8);
+      if (p.y > H * .75) p.a = Math.max(0, p.a - dt * 1.2);
+      if (p.y > H + 24 || p.a <= 0 && p.y > H * .75){ ps.splice(i, 1); continue; }
+      ctx.save();
+      ctx.translate(p.x, p.y); ctx.rotate(p.rot);
+      ctx.fillStyle = `rgba(${p.c},${p.a.toFixed(3)})`;
+      const s = p.s;
+      ctx.beginPath();
+      ctx.moveTo(0, -s);
+      ctx.bezierCurveTo(s * .9, -s * .6, s * .9, s * .5, 0, s);
+      ctx.bezierCurveTo(-s * .9, s * .5, -s * .9, -s * .6, 0, -s);
+      ctx.fill();
       ctx.restore();
     }
   }
-
-  size(); buildStars(); seed();
-  addEventListener('resize', () => { size(); buildStars(); seed(); });
-  if (matchMedia('(prefers-reduced-motion: reduce)').matches){
-    // 静止一帧
-    ctx.drawImage(skyC, 0, 0, W, H);
-    for (const p of far.concat(mid)) drawPetal(p);
-  } else {
-    requestAnimationFrame(n => { last = n; requestAnimationFrame(frame); });
-  }
+  requestAnimationFrame(n => { last = n; requestAnimationFrame(frame); });
 })();
 </script>
 </body>
