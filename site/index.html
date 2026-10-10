@@ -3,444 +3,258 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="theme-color" content="#faf8f3">
-<meta name="description" content="lyrnox 的独立个人主页，展示正在制作的项目、技术方向与常用入口。">
-<title>lyrnox · 花信</title>
-<link rel="canonical" href="https://lyrnox.com/">
-<meta property="og:type" content="website">
-<meta property="og:title" content="lyrnox · 花信">
-<meta property="og:description" content="lyrnox 的独立个人主页，展示正在制作的项目、技术方向与常用入口。">
-<meta property="og:url" content="https://lyrnox.com/">
-<meta property="og:locale" content="zh_CN">
-<meta name="twitter:card" content="summary">
+<meta name="theme-color" content="#232450">
+<meta name="description" content="桜流 — 一场挂在网上的樱吹雪">
+<title>lyrnox · 桜流</title>
 <link rel="icon" href="/favicon.svg" type="image/svg+xml">
 <style>
-  :root{
-    --paper:#faf8f3; --ink:#26262e; --muted:#8f887a; --line:#e7ddcc;
-    --pink:#e78fae; --pink-deep:#cf6390; --blue:#5b7fd6;
-    --serif:"Songti SC","STSong","Noto Serif CJK SC",Georgia,serif;
-    --latin:"Didot","Bodoni MT",Georgia,serif;
-    --sans:-apple-system,BlinkMacSystemFont,"PingFang SC","Hiragino Sans GB","Microsoft YaHei",sans-serif;
-  }
-  *{box-sizing:border-box; -webkit-tap-highlight-color:transparent}
-  html,body{margin:0; padding:0}
+  *{margin:0; padding:0; box-sizing:border-box}
+  html,body{height:100%; overflow:hidden; background:#1b1c3f}
   body{
-    font-family:var(--sans); color:var(--ink); background:var(--paper);
-    min-height:100vh; overflow-x:hidden; -webkit-font-smoothing:antialiased;
+    font-family:Didot,"Bodoni MT",Georgia,"Songti SC",serif;
+    -webkit-font-smoothing:antialiased;
+    animation:enter 2.4s ease both;
+    cursor:crosshair;
   }
-  /* 纸纹 */
-  body::after{content:""; position:fixed; inset:0; z-index:50; pointer-events:none; opacity:.05;
-    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)'/%3E%3C/svg%3E");}
-  #petals{position:fixed; inset:0; z-index:0; pointer-events:none}
-  main{position:relative; z-index:1; max-width:620px; margin:0 auto; padding:0 24px 80px}
-
-  /* 眉题 */
-  .masthead{display:flex; justify-content:space-between; align-items:baseline;
-    padding:22px 0 16px; border-bottom:1px solid var(--line);
-    font-size:11px; letter-spacing:.28em; color:var(--muted)}
-  .masthead b{color:var(--ink); font-weight:600}
-
-  /* 主视觉 */
-  .hero{position:relative; padding:88px 0 72px; overflow:visible}
-  .hero .v{position:absolute; right:2px; top:56px; writing-mode:vertical-rl;
-    font-family:var(--serif); font-size:15px; letter-spacing:.9em; color:var(--muted)}
-  .hero .v i{font-style:normal; color:var(--pink-deep)}
-  .hero .kicker{font-size:11px; letter-spacing:.34em; color:var(--muted); margin-bottom:22px}
-  .hero h1{margin:0; font-family:var(--latin); font-style:italic; font-weight:400;
-    font-size:clamp(72px,20vw,124px); line-height:.95; letter-spacing:-.02em}
-  .hero h1 .dot{color:var(--pink-deep)}
-  .hero .sub{margin-top:26px; font-family:var(--serif); font-size:17px; line-height:2.1; color:#4a4a52}
-  .hero .sub em{font-style:normal; color:var(--pink-deep)}
-  .seal{display:inline-grid; place-items:center; width:44px; height:44px; margin-top:30px;
-    border:1px solid var(--pink-deep); border-radius:6px; color:var(--pink-deep);
-    font-family:var(--serif); font-size:20px; transform:rotate(-6deg)}
-
-  /* 章节 */
-  section.block{padding:64px 0 8px; opacity:0; transform:translateY(26px); transition:opacity .9s ease, transform .9s ease}
-  section.block.in{opacity:1; transform:none}
-  .sec-head{display:flex; align-items:baseline; gap:14px; border-bottom:1px solid var(--line); padding-bottom:14px; margin-bottom:34px}
-  .sec-head .no{font-family:var(--latin); font-style:italic; font-size:15px; color:var(--pink-deep)}
-  .sec-head h2{margin:0; font-size:12px; font-weight:600; letter-spacing:.4em; color:var(--muted)}
-
-  /* 时钟 */
-  .time-big{font-family:var(--latin); font-weight:400; font-size:clamp(84px,24vw,132px);
-    letter-spacing:-.03em; line-height:1; font-variant-numeric:tabular-nums}
-  .time-big .sec{font-size:.32em; color:var(--muted); letter-spacing:0}
-  .time-meta{margin-top:18px; display:flex; gap:18px; align-items:baseline; flex-wrap:wrap}
-  .time-meta .date{font-family:var(--serif); font-size:16px}
-  .time-meta .hi{font-size:13px; color:var(--pink-deep); letter-spacing:.1em}
-
-  /* 跑马灯 */
-  .marquee{overflow:hidden; white-space:nowrap; border-top:1px solid var(--line);
-    border-bottom:1px solid var(--line); margin:64px -24px 0; padding:13px 0;
-    font-family:var(--serif); font-size:13px; letter-spacing:.5em; color:var(--muted)}
-  .marquee span{display:inline-block; padding-left:100%; animation:mq 26s linear infinite}
-  @keyframes mq{to{transform:translateX(-100%)}}
-
-  /* 关于与项目 */
-  .about-lead{margin:0; font-family:var(--serif); font-size:clamp(20px,5.6vw,25px); line-height:1.9}
-  .about-lead em{font-style:normal; color:var(--pink-deep)}
-  .about-copy{margin:18px 0 0; max-width:560px; font-size:14px; line-height:2.1; color:var(--muted)}
-  .tags{display:flex; flex-wrap:wrap; gap:8px; margin-top:24px}
-  .tags span{padding:7px 11px; border:1px solid var(--line); border-radius:999px;
-    font-size:10px; letter-spacing:.12em; color:var(--muted)}
-  .projects{display:grid; grid-template-columns:1fr; gap:14px}
-  .project{display:block; min-width:0; padding:22px 20px; border:1px solid var(--line);
-    color:var(--ink); text-decoration:none; transition:border-color .25s, transform .25s, background .25s}
-  .project:hover{border-color:var(--pink-deep); transform:translateY(-2px); background:rgba(231,143,174,.035)}
-  .project:focus-visible{outline:2px solid var(--pink-deep); outline-offset:4px}
-  .project-top{display:flex; justify-content:space-between; align-items:center}
-  .project-no{font-size:10px; letter-spacing:.18em; color:var(--muted)}
-  .project-arrow{font-size:17px; color:var(--pink-deep)}
-  .project h3{margin:18px 0 8px; font-family:var(--serif); font-weight:400; font-size:25px}
-  .project p{min-height:3.8em; margin:0; font-size:13px; line-height:1.9; color:var(--muted)}
-  .project-more{display:inline-block; margin-top:18px; padding-bottom:4px; border-bottom:1px solid var(--line);
-    font-size:11px; letter-spacing:.16em}
-  @media (min-width:520px){.projects{grid-template-columns:1fr 1fr}}
-  .tbtn{background:none; border:none; cursor:pointer; font:inherit; font-size:13px; letter-spacing:.3em; text-indent:.3em;
-    color:var(--ink); padding:10px 6px; border-bottom:1px solid var(--ink)}
-  .tbtn:active{opacity:.5}
-  .tbtn:disabled{opacity:.35}
-
-  /* 一言 */
-  .quote{cursor:pointer; padding:10px 0 6px; min-height:150px}
-  .quote p{margin:0; font-family:var(--serif); font-size:clamp(21px,6vw,27px); line-height:1.9; transition:opacity .35s}
-  .quote .from{margin-top:16px; font-size:12px; letter-spacing:.3em; color:var(--muted); transition:opacity .35s}
-  .quote:focus-visible{outline:2px solid var(--pink-deep); outline-offset:6px}
-  .quote .hint{margin-top:22px; font-size:11px; letter-spacing:.24em; color:#b6ad9c}
-
-  /* 游戏 */
-  #game{width:100%; height:360px; display:block; touch-action:none; cursor:crosshair;
-    border-top:1px solid var(--line); border-bottom:1px solid var(--line)}
-  .game-bar{display:flex; align-items:center; justify-content:space-between; margin-top:16px}
-  .game-bar .score{font-family:var(--latin); font-size:19px; font-variant-numeric:tabular-nums}
-  .game-bar .score small{font-family:var(--sans); font-size:11px; letter-spacing:.2em; color:var(--muted)}
-  .game-bar .score b{color:var(--pink-deep); font-weight:400}
-  .game-tip{font-size:11px; letter-spacing:.2em; color:var(--muted); margin-top:12px}
-
-  footer{margin-top:90px; border-top:1px solid var(--line); padding-top:22px;
-    display:flex; justify-content:space-between; font-size:11px; letter-spacing:.22em; color:var(--muted)}
-  footer .mk{font-family:var(--serif); font-size:13px; color:var(--pink-deep)}
-
-  @media (prefers-color-scheme: dark){
-    :root{--paper:#16161d; --ink:#ece7da; --muted:#8a8577; --line:#2e2c33}
-    body::after{opacity:.07}
-    .hero .sub{color:#b9b4a6}
-    .tbtn{color:var(--ink); border-color:var(--ink)}
-  }
+  @keyframes enter{from{opacity:0} to{opacity:1}}
+  #sky{position:fixed; inset:0; width:100%; height:100%; display:block}
+  .vignette{position:fixed; inset:0; pointer-events:none; z-index:3;
+    background:radial-gradient(ellipse at 50% 42%, transparent 52%, rgba(10,8,28,.42) 100%)}
+  .grain{position:fixed; inset:0; pointer-events:none; z-index:4; opacity:.07; mix-blend-mode:overlay;
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)'/%3E%3C/svg%3E")}
+  .wordmark{position:fixed; z-index:5; left:26px; bottom:24px;
+    font-style:italic; font-size:17px; letter-spacing:.32em; color:rgba(255,240,246,.85)}
+  .wordmark small{font-style:normal; font-family:-apple-system,"PingFang SC",sans-serif;
+    font-size:10px; letter-spacing:.42em; color:rgba(255,240,246,.42); margin-left:12px}
+  .vtext{position:fixed; z-index:5; right:24px; top:50%; transform:translateY(-50%);
+    writing-mode:vertical-rl; font-family:"Songti SC","STSong",serif;
+    font-size:15px; letter-spacing:1.1em; color:rgba(255,240,246,.34)}
+  .hint{position:fixed; z-index:5; left:50%; bottom:26px; transform:translateX(-50%);
+    font-family:-apple-system,"PingFang SC",sans-serif; font-size:11px; letter-spacing:.3em;
+    color:rgba(255,240,246,.5); white-space:nowrap;
+    animation:hintfade 1.2s ease 6s forwards}
+  @keyframes hintfade{to{opacity:0}}
   @media (prefers-reduced-motion: reduce){
-    #petals{display:none} .marquee span{animation:none}
-    section.block{opacity:1; transform:none; transition:none}
+    #sky{display:none}
+    body{background:linear-gradient(180deg,#232450,#b4638f 70%,#ffd9b8); animation:none}
+    .hint{display:none}
   }
 </style>
-<noscript><style>section.block{opacity:1; transform:none}</style></noscript>
 </head>
 <body>
-<canvas id="petals"></canvas>
-<main>
-  <div class="masthead"><span><b>LYRNOX</b> · PERSONAL SPACE</span><span>花信 · 独立主页</span></div>
-
-  <header class="hero">
-    <div class="v">花<i>信</i>有期</div>
-    <div class="kicker">A PERSONAL SPACE ON THE INTERNET</div>
-    <h1>lyrnox<span class="dot">.</span></h1>
-    <p class="sub">平时折腾 Web、Android 和各种小工具。<br>比起只聊想法，更喜欢把它们<em>做出来</em>。</p>
-    <div class="seal">信</div>
-  </header>
-
-  <section class="block">
-    <div class="sec-head"><span class="no">01</span><h2>时间</h2></div>
-    <div class="time-big"><span id="hm">--:--</span><span class="sec" id="ss">--</span></div>
-    <div class="time-meta">
-      <span class="date" id="date"></span>
-      <span class="hi" id="hi"></span>
-    </div>
-  </section>
-
-  <div class="marquee"><span>✿ 保留好奇心 ✿ 把想法做出来 ✿ 把细节磨好 ✿ 不必急着定义自己 ✿ 保留好奇心 ✿ 把想法做出来 ✿&nbsp;</span></div>
-
-  <section class="block">
-    <div class="sec-head"><span class="no">02</span><h2>关于我</h2></div>
-    <div class="about">
-      <p class="about-lead">我是 <em>lyrnox</em>，喜欢把遇到的问题拆开，再一点点做成真正能用的东西。</p>
-      <p class="about-copy">平时关注 Web、Android、自动化和自托管。这里放项目入口，也留一点给新想法的空间；不急着给自己下定义，先把手头的事情做好。</p>
-      <div class="tags" aria-label="关注方向">
-        <span>WEB</span>
-        <span>ANDROID</span>
-        <span>AUTOMATION</span>
-        <span>SELF-HOSTING</span>
-      </div>
-    </div>
-  </section>
-
-  <section class="block">
-    <div class="sec-head"><span class="no">03</span><h2>项目与入口</h2></div>
-    <div class="projects">
-      <a class="project" href="https://mail.lyrnox.com/" target="_blank" rel="noopener noreferrer">
-        <div class="project-top"><span class="project-no">01 / PRODUCT</span><span class="project-arrow">↗</span></div>
-        <h3>Cloud Mail</h3>
-        <p>一个持续打磨中的邮件项目，关注网页端与 Android 端的体验和同步细节。</p>
-        <span class="project-more">打开项目 ↗</span>
-      </a>
-      <a class="project" href="https://github.com/xxxooooxxx" target="_blank" rel="noopener noreferrer">
-        <div class="project-top"><span class="project-no">02 / OPEN SOURCE</span><span class="project-arrow">↗</span></div>
-        <h3>代码与实验</h3>
-        <p>Web、Android、自托管与网络工具方面的项目和技术尝试。</p>
-        <span class="project-more">浏览 GitHub ↗</span>
-      </a>
-    </div>
-  </section>
-
-  <section class="block">
-    <div class="sec-head"><span class="no">04</span><h2>读到的句子</h2></div>
-    <div class="quote" id="quoteCard" role="button" tabindex="0">
-      <p id="qtext"></p>
-      <div class="from" id="qfrom"></div>
-      <div class="hint">— 轻点换一句 —</div>
-    </div>
-  </section>
-
-  <section class="block">
-    <div class="sec-head"><span class="no">05</span><h2>接花瓣 · 三十秒</h2></div>
-    <canvas id="game" role="img" aria-label="接花瓣小游戏：左右移动篮子，接住落下的花瓣"></canvas>
-    <div class="game-bar">
-      <div class="score"><b id="gscore">0</b> <small>得点 · 最佳 <span id="gbest">0</span></small></div>
-      <button class="tbtn" id="gstart">开始</button>
-    </div>
-    <div class="game-tip">左右滑动或移动鼠标，接住落下的花瓣</div>
-  </section>
-
-  <footer>
-    <span>© 2026 LYRNOX</span>
-    <span class="mk">花信</span>
-    <span>A LITTLE SPACE ON THE INTERNET</span>
-  </footer>
-</main>
-
+<canvas id="sky"></canvas>
+<div class="vignette"></div>
+<div class="grain"></div>
+<div class="wordmark">lyrnox<small>SAKURA&nbsp;DRIFT</small></div>
+<div class="vtext">桜流</div>
+<div class="hint" id="hint">移动搅动风 · 轻点爆开花瓣</div>
+<noscript><style>.hint{display:none}</style></noscript>
 <script>
 "use strict";
-/* 入场 */
-document.querySelectorAll('section.block').forEach(s =>
-  new IntersectionObserver((es, o) => es.forEach(e => {
-    if (e.isIntersecting){ e.target.classList.add('in'); o.unobserve(e.target); }
-  }), {threshold:.12}).observe(s));
-
-/* 樱花 */
 (function(){
-  const cv = document.getElementById('petals'), ctx = cv.getContext('2d');
-  if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-  let W, H;
-  const size = () => { W = cv.width = innerWidth; H = cv.height = innerHeight; };
-  size(); addEventListener('resize', size);
-  const mk = init => ({ x: Math.random()*W, y: init ? Math.random()*H : -24,
-    s: 5 + Math.random()*9, vy: .35 + Math.random()*.7, ph: Math.random()*6.28,
-    sw: .5 + Math.random()*1.1, rot: Math.random()*6.28, vr: (Math.random()-.5)*.015,
-    a: .28 + Math.random()*.4 });
-  const ps = Array.from({length: 26}, () => mk(true));
-  (function tick(){
-    ctx.clearRect(0,0,W,H);
-    // 改变画布尺寸会重置绘图状态，所以光晕参数每帧重设
-    ctx.shadowColor = 'rgba(231,143,174,.55)';
-    ctx.shadowBlur = 12;
-    for (const p of ps){
-      p.y += p.vy; p.ph += .008; p.rot += p.vr;
-      p.x += Math.sin(p.ph) * p.sw * .35;
-      if (p.y > H + 24) Object.assign(p, mk(false));
-      ctx.save(); ctx.translate(p.x, p.y); ctx.rotate(p.rot);
-      ctx.fillStyle = 'rgba(231,143,174,' + p.a + ')';
-      ctx.beginPath();
-      ctx.moveTo(0, -p.s);
-      ctx.bezierCurveTo(p.s*.9, -p.s*.6, p.s*.9, p.s*.5, 0, p.s);
-      ctx.bezierCurveTo(-p.s*.9, p.s*.5, -p.s*.9, -p.s*.6, 0, -p.s);
-      ctx.fill(); ctx.restore();
-    }
-    requestAnimationFrame(tick);
-  })();
-})();
-
-/* 时钟 */
-(function(){
-  const hm = document.getElementById('hm'), ss = document.getElementById('ss'),
-        d = document.getElementById('date'), hi = document.getElementById('hi');
-  const hmf = new Intl.DateTimeFormat('zh-CN',{hour:'2-digit',minute:'2-digit',hour12:false,timeZone:'Asia/Shanghai'});
-  const ssf = new Intl.DateTimeFormat('zh-CN',{second:'2-digit',timeZone:'Asia/Shanghai'});
-  const df = new Intl.DateTimeFormat('zh-CN',{month:'long',day:'numeric',weekday:'long',timeZone:'Asia/Shanghai'});
-  const hf = new Intl.DateTimeFormat('zh-CN',{hour:'numeric',hour12:false,timeZone:'Asia/Shanghai'});
-  const his = [[5,'夜深了'],[9,'早安'],[12,'上午好'],[14,'午安'],[18,'下午好'],[23,'晚上好'],[24,'夜深了']];
-  function hourOf(d){ // zh-CN 下 hour:'numeric' 会带"时"后缀, 用 formatToParts 取纯数字
-    return (+hf.formatToParts(d).find(p => p.type === 'hour').value) % 24;
-  }
-  function upd(){
-    const now = new Date();
-    hm.textContent = hmf.format(now); ss.textContent = ssf.format(now);
-    d.textContent = df.format(now);
-    hi.textContent = '✿ ' + his.find(x => hourOf(now) < x[0])[1];
-  }
-  upd(); setInterval(upd, 1000);
-})();
-
-/* 关于与项目为静态内容，无需额外脚本 */
-
-/* 一言 */
-(function(){
-  const qs = [
-    ['明月松间照，清泉石上流。','王维《山居秋暝》'],
-    ['采菊东篱下，悠然见南山。','陶渊明《饮酒》'],
-    ['人间有味是清欢。','苏轼《浣溪沙》'],
-    ['山重水复疑无路，柳暗花明又一村。','陆游《游山西村》'],
-    ['春水碧于天，画船听雨眠。','韦庄《菩萨蛮》'],
-    ['落花人独立，微雨燕双飞。','晏几道《临江仙》'],
-    ['小楼一夜听春雨，深巷明朝卖杏花。','陆游《临安春雨初霁》'],
-    ['云破月来花弄影。','张先《天仙子》'],
-    ['兴尽晚回舟，误入藕花深处。','李清照《如梦令》'],
-    ['人生如逆旅，我亦是行人。','苏轼《临江仙》'],
-    ['长风破浪会有时，直挂云帆济沧海。','李白《行路难》'],
-    ['凌晨四点醒来，发现海棠花未眠。','川端康成'],
-    ['你必须改变你的生活。','里尔克'],
-    ['我步入丛林，因为我希望生活得有意义。','梭罗《瓦尔登湖》'],
-    ['岁月不饶人，我亦未曾饶过岁月。','木心'],
-    ['四方食事，不过一碗人间烟火。','汪曾祺'],
-    ['一个人只拥有此生此世是不够的，他还应该拥有诗意的世界。','王小波'],
-    ['生如夏花之绚烂，死如秋叶之静美。','泰戈尔《飞鸟集》'],
-    ['死并非生的对立面，而是作为生的一部分永存。','村上春树《挪威的森林》'],
-    ['黑夜给了我黑色的眼睛，我却用它寻找光明。','顾城《一代人》'],
-    ['面朝大海，春暖花开。','海子'],
-    ['草在结它的种子，风在摇它的叶子，我们站着，不说话，就十分美好。','顾城《门前》'],
-    ['不要温顺地走进那个良宵。','狄兰·托马斯'],
-    ['流水落花春去也，天上人间。','李煜《浪淘沙》'],
-  ];
-  const t = document.getElementById('qtext'), f = document.getElementById('qfrom'),
-        card = document.getElementById('quoteCard');
-  let last = -1;
-  function next(){
-    let i; do { i = Math.random()*qs.length | 0; } while (i === last);
-    last = i;
-    t.style.opacity = 0; f.style.opacity = 0;
-    setTimeout(() => {
-      t.textContent = '「' + qs[i][0] + '」'; f.textContent = '—— ' + qs[i][1];
-      t.style.opacity = 1; f.style.opacity = 1;
-    }, 260);
-  }
-  card.onclick = next;
-  card.onkeydown = e => { if (e.key === 'Enter' || e.key === ' '){ e.preventDefault(); next(); } };
-  next();
-})();
-
-/* 接花瓣 */
-(function(){
-  const cv = document.getElementById('game'), ctx = cv.getContext('2d');
-  const scoreEl = document.getElementById('gscore'), bestEl = document.getElementById('gbest'), btn = document.getElementById('gstart');
-  const darkMQ = matchMedia('(prefers-color-scheme: dark)');
-  const ink = () => darkMQ.matches ? '#ece7da' : '#26262e';
-  const PINK = '#e78fae', MUT = '#8f887a';
+  const cv = document.getElementById('sky'), ctx = cv.getContext('2d');
+  const TAU = Math.PI * 2;
   const dpr = Math.min(devicePixelRatio || 1, 2);
-  const BW = 96; // 篮宽
   let W = 0, H = 0;
   function size(){
-    const w = cv.clientWidth, h = cv.clientHeight;
-    if (w === W && h === H) return;
-    W = w; H = h; cv.width = W*dpr; cv.height = H*dpr; ctx.setTransform(dpr,0,0,dpr,0,0);
+    W = innerWidth; H = innerHeight;
+    cv.width = W * dpr; cv.height = H * dpr;
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    buildSky();
   }
-  const BK = 'huaxin-best';
-  const store = {
-    get(){ try { return +localStorage.getItem(BK) || 0; } catch(e){ return 0; } },
-    set(v){ try { localStorage.setItem(BK, v); } catch(e){} }
-  };
-  bestEl.textContent = store.get();
-  let state = 'idle', ps = [], fx = [], bx = 0, score = 0, left = 0, acc = 0, last = 0, isRecord = false;
-  const topY = () => H - 52; // 篮上沿
-  const mk = () => ({ x: 20 + Math.random()*Math.max(W-40, 40), y: -18, s: 7+Math.random()*8,
-    vy: 110+Math.random()*110, ph: Math.random()*6.28, sw: 30+Math.random()*60,
-    rot: Math.random()*6.28, vr: (Math.random()-.5)*3 });
-  function petal(p){
-    ctx.save(); ctx.translate(p.x, p.y); ctx.rotate(p.rot);
-    ctx.fillStyle = PINK;
-    ctx.beginPath();
-    ctx.moveTo(0, -p.s);
-    ctx.bezierCurveTo(p.s*.9, -p.s*.6, p.s*.9, p.s*.5, 0, p.s);
-    ctx.bezierCurveTo(-p.s*.9, p.s*.5, -p.s*.9, -p.s*.6, 0, -p.s);
-    ctx.fill(); ctx.restore();
+
+  /* ---------- 天空: 慢变的黄昏渐变 ---------- */
+  const skyC = document.createElement('canvas');
+  const stops = [ // [位置, 基色]
+    [0.00, [35, 36, 80]], [0.34, [74, 58, 110]], [0.58, [150, 80, 130]],
+    [0.78, [214, 120, 138]], [0.92, [247, 178, 150]], [1.00, [255, 217, 184]],
+  ];
+  function buildSky(){
+    skyC.width = 2; skyC.height = Math.max(H, 2);
+    const g = skyC.getContext('2d');
+    const gr = g.createLinearGradient(0, 0, 0, skyC.height);
+    for (const [p, c] of stops) gr.addColorStop(p, `rgb(${c[0]},${c[1]},${c[2]})`);
+    g.fillStyle = gr; g.fillRect(0, 0, 2, skyC.height);
   }
-  function basket(){
-    const by = topY();
-    ctx.strokeStyle = ink(); ctx.lineWidth = 1.5;
-    ctx.beginPath();
-    if (ctx.roundRect) ctx.roundRect(bx-BW/2, by, BW, 30, 15); else ctx.rect(bx-BW/2, by, BW, 30);
-    ctx.stroke();
+  // 颜色随时间极慢漂移(周期约 3 分钟,几乎察觉不到,但"挂着"时是活的)
+  function skyTint(t){
+    const k = Math.sin(t * 0.00035);
+    return `rgba(${120 + k * 22 | 0},${70 + k * 12 | 0},${140 + k * 18 | 0},0.10)`;
   }
-  function update(dt){
-    if (state === 'playing'){
-      left -= dt; acc += dt;
-      if (acc > .42){ acc = 0; if (ps.length < 24) ps.push(mk()); }
-      if (left <= 0){ finish(); return; }
+
+  /* ---------- 预渲染精灵 ---------- */
+  function petalSprite(px, tone, blur){
+    const c = document.createElement('canvas');
+    c.width = c.height = px;
+    const x = c.getContext('2d'), s = px / 2;
+    x.translate(s, s);
+    if (blur) x.filter = `blur(${blur}px)`;
+    const g = x.createLinearGradient(-s * .5, -s, s * .5, s);
+    g.addColorStop(0, '#ffffff'); g.addColorStop(.45, tone); g.addColorStop(1, tone);
+    x.fillStyle = g;
+    x.beginPath();
+    x.moveTo(0, -s * .92);
+    x.bezierCurveTo(s * .82, -s * .55, s * .72, s * .42, 0, s * .92);
+    x.bezierCurveTo(-s * .72, s * .42, -s * .82, -s * .55, 0, -s * .92);
+    x.fill();
+    return c;
+  }
+  function glowSprite(px, rgb){
+    const c = document.createElement('canvas');
+    c.width = c.height = px;
+    const x = c.getContext('2d');
+    const g = x.createRadialGradient(px/2, px/2, 0, px/2, px/2, px/2);
+    g.addColorStop(0, `rgba(${rgb},.85)`); g.addColorStop(.4, `rgba(${rgb},.32)`); g.addColorStop(1, `rgba(${rgb},0)`);
+    x.fillStyle = g; x.fillRect(0, 0, px, px);
+    return c;
+  }
+  const tones = ['#ffd9e6', '#f7aec9', '#ef8fb4', '#ffffff'];
+  const sprites = tones.map(t => petalSprite(64, t, 0));
+  const spritesSoft = tones.map(t => petalSprite(64, t, 3)); // 远景柔焦
+  const moonGlow = glowSprite(320, '255,236,220');
+  const pinkGlow = glowSprite(420, '255,150,190');
+
+  /* ---------- 星 ---------- */
+  let stars = [];
+  function buildStars(){
+    stars = [];
+    const n = Math.floor(W * H / 16000);
+    for (let i = 0; i < n; i++) stars.push({
+      x: Math.random() * W, y: Math.random() * H * .5,
+      r: .4 + Math.random() * 1.1, ph: Math.random() * TAU, sp: .5 + Math.random() * 1.5,
+    });
+  }
+
+  /* ---------- 花瓣 ---------- */
+  const rnd = (a, b) => a + Math.random() * (b - a);
+  let far = [], mid = [], near = [], burst = [];
+  function mkPetal(layer){
+    const cfg = layer === 0 ? { s: [2, 5],  a: [.14, .38], v: [6, 16] }
+              : layer === 1 ? { s: [6, 17], a: [.45, .92], v: [14, 34] }
+              :               { s: [30, 72], a: [.07, .16], v: [40, 90] };
+    return {
+      x: rnd(-60, W + 60), y: rnd(-60, H + 60),
+      s: rnd(cfg.s[0], cfg.s[1]), a: rnd(cfg.a[0], cfg.a[1]),
+      vy: rnd(cfg.v[0], cfg.v[1]), ph: rnd(0, TAU),
+      sw: rnd(.4, 1.4), rot: rnd(0, TAU), vr: rnd(-.9, .9),
+      sp: sprites[Math.random() * sprites.length | 0],
+      spSoft: spritesSoft[Math.random() * spritesSoft.length | 0],
+      layer,
+    };
+  }
+  function seed(){
+    far = []; mid = []; near = []; burst = [];
+    const n0 = Math.floor(W / 14), n1 = Math.floor(W / 9);
+    for (let i = 0; i < n0; i++) far.push(mkPetal(0));
+    for (let i = 0; i < n1; i++) mid.push(mkPetal(1));
+    for (let i = 0; i < 10; i++) near.push(mkPetal(2));
+  }
+
+  /* ---------- 风场 + 鼠标 ---------- */
+  let mx = -9999, my = -9999, gust = 0, lastMove = 0;
+  addEventListener('pointermove', e => {
+    mx = e.clientX; my = e.clientY; lastMove = performance.now(); gust = Math.min(1, gust + .25);
+  }, { passive: true });
+  addEventListener('pointerdown', e => {
+    for (let i = 0; i < 26; i++){
+      const an = rnd(0, TAU), sp = rnd(60, 300);
+      burst.push({ x: e.clientX, y: e.clientY, vx: Math.cos(an) * sp, vy: Math.sin(an) * sp - 40,
+        s: rnd(5, 13), a: rnd(.6, 1), rot: rnd(0, TAU), vr: rnd(-4, 4),
+        life: 0, max: rnd(1.6, 2.8), sp: sprites[Math.random() * sprites.length | 0] });
     }
-    const top = topY();
-    for (let i = ps.length-1; i >= 0; i--){
-      const p = ps[i];
-      p.y += p.vy*dt; p.ph += dt*2; p.rot += p.vr*dt; p.x += Math.sin(p.ph)*p.sw*dt;
-      if (state === 'playing' && p.y > top-14 && p.y < top+16 && Math.abs(p.x-bx) < BW/2){
-        score++; scoreEl.textContent = score;
-        fx.push({x: p.x, y: p.y, r: 4, a: .8});
-        ps.splice(i,1); continue;
-      }
-      if (p.y > H+24){ ps.splice(i,1); continue; }
+  }, { passive: true });
+
+  function wind(x, y, t, out){
+    const s = Math.sin, c = Math.cos;
+    let wx = 16 + 13 * s(y * .004 + t * .00022) + 7 * s(y * .011 - t * .00013);
+    let wy = 9 + 9 * s(x * .003 - t * .00019) + 5 * c(x * .009 + t * .00016);
+    const dx = x - mx, dy = y - my, R = 230;
+    const d2 = dx * dx + dy * dy;
+    if (d2 < R * R){
+      const d = Math.sqrt(d2) || 1, f = 1 - d / R, g = f * f * gust;
+      wx += (-dy / d) * 110 * g + (dx / d) * 46 * f * gust;
+      wy += (dx / d) * 110 * g + (dy / d) * 46 * f * gust;
     }
-    for (let i = fx.length-1; i >= 0; i--){
-      const e = fx[i]; e.r += dt*90; e.a -= dt*2.4;
-      if (e.a <= 0) fx.splice(i,1);
+    out[0] = wx; out[1] = wy;
+  }
+
+  /* ---------- 主循环 ---------- */
+  const wv = [0, 0];
+  let last = 0, moonX = .5, running = true;
+  document.addEventListener('visibilitychange', () => { running = !document.hidden; });
+
+  function drawPetal(p){
+    ctx.save();
+    ctx.translate(p.x, p.y); ctx.rotate(p.rot);
+    ctx.globalAlpha = p.a;
+    const img = p.layer === 0 ? p.spSoft : p.sp;
+    ctx.drawImage(img, -p.s, -p.s, p.s * 2, p.s * 2);
+    ctx.restore();
+  }
+
+  function frame(now){
+    requestAnimationFrame(frame);
+    if (!running) return;
+    const dt = Math.min((now - last) / 1000 || 0, .05); last = now;
+    const t = now;
+    gust *= .986;
+
+    // 天空
+    ctx.drawImage(skyC, 0, 0, W, H);
+    ctx.fillStyle = skyTint(t); ctx.fillRect(0, 0, W, H);
+
+    // 月亮光晕(极慢漂移)
+    moonX = .5 + Math.sin(t * .00003) * .18;
+    const myy = H * .2 + Math.cos(t * .000043) * H * .03;
+    ctx.globalAlpha = .5;
+    ctx.drawImage(moonGlow, moonX * W - 160, myy - 160);
+    ctx.globalAlpha = .30;
+    ctx.drawImage(pinkGlow, W * .78 - 210 + Math.sin(t * .00005) * 30, H * .62 - 210);
+    ctx.globalAlpha = 1;
+
+    // 星
+    ctx.fillStyle = '#fff';
+    for (const st of stars){
+      ctx.globalAlpha = .25 + .35 * (0.5 + 0.5 * Math.sin(st.ph + t * .001 * st.sp));
+      ctx.fillRect(st.x, st.y, st.r, st.r);
+    }
+    ctx.globalAlpha = 1;
+
+    // 花瓣
+    const all = far.concat(mid, near);
+    for (const p of all){
+      wind(p.x, p.y, t, wv);
+      p.x += (wv[0] + Math.sin(p.ph) * p.sw * 22) * dt;
+      p.y += (wv[1] + p.vy * .35 + Math.cos(p.ph * .7) * 8) * dt;
+      p.ph += dt * 1.4; p.rot += p.vr * dt;
+      const m = 90;
+      if (p.x < -m) p.x = W + m; else if (p.x > W + m) p.x = -m;
+      if (p.y < -m) p.y = H + m; else if (p.y > H + m) p.y = -m;
+      drawPetal(p);
+    }
+    // 爆开的花瓣
+    for (let i = burst.length - 1; i >= 0; i--){
+      const b = burst[i];
+      b.life += dt;
+      if (b.life > b.max){ burst.splice(i, 1); continue; }
+      b.vx *= (1 - dt * 1.6); b.vy *= (1 - dt * 1.6); b.vy += dt * 60;
+      b.x += b.vx * dt; b.y += b.vy * dt; b.rot += b.vr * dt;
+      ctx.save(); ctx.translate(b.x, b.y); ctx.rotate(b.rot);
+      ctx.globalAlpha = b.a * (1 - b.life / b.max);
+      ctx.drawImage(b.sp, -b.s, -b.s, b.s * 2, b.s * 2);
+      ctx.restore();
     }
   }
-  function render(){
-    ctx.clearRect(0,0,W,H);
-    for (const p of ps) petal(p);
-    for (const e of fx){
-      ctx.save(); ctx.globalAlpha = Math.max(e.a, 0);
-      ctx.strokeStyle = PINK; ctx.lineWidth = 1.5;
-      ctx.beginPath(); ctx.arc(e.x, e.y, e.r, 0, 6.29); ctx.stroke(); ctx.restore();
-    }
-    basket();
-    ctx.textAlign = 'center';
-    if (state === 'playing'){
-      ctx.fillStyle = ink(); ctx.font = '13px system-ui';
-      ctx.fillText(Math.ceil(left) + 's', bx, H-8);
-    } else if (state === 'idle'){
-      ctx.fillStyle = MUT; ctx.font = '12px system-ui';
-      ctx.fillText('点「开始」，接住三十秒的花期', W/2, H/2);
-    } else {
-      ctx.fillStyle = ink(); ctx.font = 'italic 30px Didot, Georgia, serif';
-      ctx.fillText(score + ' petals', W/2, H/2 - 6);
-      ctx.font = '13px system-ui'; ctx.fillStyle = MUT;
-      ctx.fillText(isRecord ? '新纪录' : '点「再来一局」继续', W/2, H/2 + 26);
-    }
+
+  size(); buildStars(); seed();
+  addEventListener('resize', () => { size(); buildStars(); seed(); });
+  if (matchMedia('(prefers-reduced-motion: reduce)').matches){
+    // 静止一帧
+    ctx.drawImage(skyC, 0, 0, W, H);
+    for (const p of far.concat(mid)) drawPetal(p);
+  } else {
+    requestAnimationFrame(n => { last = n; requestAnimationFrame(frame); });
   }
-  let visible = true;
-  new IntersectionObserver(es => { visible = es[0].isIntersecting; }).observe(cv);
-  function loop(now){
-    size();
-    const dt = Math.min(Math.max((now-last)/1000, 0), .05); last = now;
-    if (visible && W > 10){ update(dt); render(); } // 离屏时不更新，游戏计时也随之暂停
-    requestAnimationFrame(loop);
-  }
-  function move(x){
-    const r = cv.getBoundingClientRect();
-    bx = Math.max(BW/2, Math.min(W-BW/2, x - r.left));
-  }
-  cv.addEventListener('pointermove', e => move(e.clientX));
-  cv.addEventListener('pointerdown', e => move(e.clientX));
-  function finish(){
-    state = 'over';
-    const prev = store.get();
-    isRecord = score > prev && score > 0;
-    const best = Math.max(score, prev);
-    store.set(best); bestEl.textContent = best;
-    btn.textContent = '再来一局'; btn.disabled = false;
-  }
-  btn.onclick = () => {
-    size(); ps = []; fx = []; score = 0; acc = 0; isRecord = false;
-    scoreEl.textContent = '0'; left = 30; state = 'playing'; bx = W/2;
-    btn.textContent = '进行中'; btn.disabled = true;
-  };
-  requestAnimationFrame(n => { last = n; size(); bx = W/2; requestAnimationFrame(loop); });
 })();
 </script>
 </body>
