@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#faf8f3">
-<meta name="description" content="lyrnox · 花信 — 一个随手搭的小站">
+<meta name="description" content="lyrnox 的独立个人主页，展示正在制作的项目、技术方向与常用入口。">
 <title>lyrnox · 花信</title>
 <link rel="icon" href="/favicon.svg" type="image/svg+xml">
 <style>
@@ -70,13 +70,26 @@
   .marquee span{display:inline-block; padding-left:100%; animation:mq 26s linear infinite}
   @keyframes mq{to{transform:translateX(-100%)}}
 
-  /* 呼吸 */
-  .breath{display:flex; flex-direction:column; align-items:center; gap:26px; padding:14px 0 10px}
-  .ring{width:168px; height:168px; border:1px solid var(--pink-deep); border-radius:50%;
-    display:grid; place-items:center; transition:transform 1.2s cubic-bezier(.4,0,.2,1), border-color 1.2s}
-  .ring span{font-family:var(--serif); font-size:16px; letter-spacing:.5em; text-indent:.5em; color:var(--ink)}
-  .ring.hold{border-color:var(--blue)}
-  .breath .round{font-size:11px; letter-spacing:.32em; text-indent:.32em; color:var(--muted); min-height:15px}
+  /* 关于与项目 */
+  .about-lead{margin:0; font-family:var(--serif); font-size:clamp(20px,5.6vw,25px); line-height:1.9}
+  .about-lead em{font-style:normal; color:var(--pink-deep)}
+  .about-copy{margin:18px 0 0; max-width:560px; font-size:14px; line-height:2.1; color:var(--muted)}
+  .tags{display:flex; flex-wrap:wrap; gap:8px; margin-top:24px}
+  .tags span{padding:7px 11px; border:1px solid var(--line); border-radius:999px;
+    font-size:10px; letter-spacing:.12em; color:var(--muted)}
+  .projects{display:grid; grid-template-columns:1fr; gap:14px}
+  .project{display:block; min-width:0; padding:22px 20px; border:1px solid var(--line);
+    color:var(--ink); text-decoration:none; transition:border-color .25s, transform .25s, background .25s}
+  .project:hover{border-color:var(--pink-deep); transform:translateY(-2px); background:rgba(231,143,174,.035)}
+  .project:focus-visible{outline:2px solid var(--pink-deep); outline-offset:4px}
+  .project-top{display:flex; justify-content:space-between; align-items:center}
+  .project-no{font-size:10px; letter-spacing:.18em; color:var(--muted)}
+  .project-arrow{font-size:17px; color:var(--pink-deep)}
+  .project h3{margin:18px 0 8px; font-family:var(--serif); font-weight:400; font-size:25px}
+  .project p{min-height:3.8em; margin:0; font-size:13px; line-height:1.9; color:var(--muted)}
+  .project-more{display:inline-block; margin-top:18px; padding-bottom:4px; border-bottom:1px solid var(--line);
+    font-size:11px; letter-spacing:.16em}
+  @media (min-width:520px){.projects{grid-template-columns:1fr 1fr}}
   .tbtn{background:none; border:none; cursor:pointer; font:inherit; font-size:13px; letter-spacing:.3em; text-indent:.3em;
     color:var(--ink); padding:10px 6px; border-bottom:1px solid var(--ink)}
   .tbtn:active{opacity:.5}
@@ -116,14 +129,14 @@
 <body>
 <canvas id="petals"></canvas>
 <main>
-  <div class="masthead"><span><b>LYRNOX</b> · EST. 2026</span><span>花信 · 第二版</span></div>
+  <div class="masthead"><span><b>LYRNOX</b> · PERSONAL SPACE</span><span>花信 · 独立主页</span></div>
 
   <header class="hero">
     <div class="v">花<i>信</i>有期</div>
-    <div class="kicker">A SMALL SITE, MADE BY HAND</div>
+    <div class="kicker">A PERSONAL SPACE ON THE INTERNET</div>
     <h1>lyrnox<span class="dot">.</span></h1>
-    <p class="sub">花有信，候有期。<br>坐下来，喝杯茶，<em>慢慢</em>看。</p>
-    <div class="seal">印</div>
+    <p class="sub">平时折腾 Web、Android 和各种小工具。<br>比起只聊想法，更喜欢把它们<em>做出来</em>。</p>
+    <div class="seal">信</div>
   </header>
 
   <section class="block">
@@ -135,19 +148,42 @@
     </div>
   </section>
 
-  <div class="marquee"><span>✿ 花开有时 ✿ 落亦有时 ✿ 代码也是 ✿ 慢慢来 ✿ 花开有时 ✿ 落亦有时 ✿ 代码也是 ✿ 慢慢来 ✿&nbsp;</span></div>
+  <div class="marquee"><span>✿ 保留好奇心 ✿ 把想法做出来 ✿ 把细节磨好 ✿ 不必急着定义自己 ✿ 保留好奇心 ✿ 把想法做出来 ✿&nbsp;</span></div>
 
   <section class="block">
-    <div class="sec-head"><span class="no">02</span><h2>呼吸</h2></div>
-    <div class="breath">
-      <div class="ring" id="ring"><span id="phase">预备</span></div>
-      <div class="round" id="round"></div>
-      <button class="tbtn" id="breathBtn">开始呼吸</button>
+    <div class="sec-head"><span class="no">02</span><h2>关于我</h2></div>
+    <div class="about">
+      <p class="about-lead">我是 <em>lyrnox</em>，喜欢把遇到的问题拆开，再一点点做成真正能用的东西。</p>
+      <p class="about-copy">平时关注 Web、Android、自动化和自托管。这里放项目入口，也留一点给新想法的空间；不急着给自己下定义，先把手头的事情做好。</p>
+      <div class="tags" aria-label="关注方向">
+        <span>WEB</span>
+        <span>ANDROID</span>
+        <span>AUTOMATION</span>
+        <span>SELF-HOSTING</span>
+      </div>
     </div>
   </section>
 
   <section class="block">
-    <div class="sec-head"><span class="no">03</span><h2>一言</h2></div>
+    <div class="sec-head"><span class="no">03</span><h2>项目与入口</h2></div>
+    <div class="projects">
+      <a class="project" href="https://mail.lyrnox.com/" target="_blank" rel="noopener noreferrer">
+        <div class="project-top"><span class="project-no">01 / PRODUCT</span><span class="project-arrow">↗</span></div>
+        <h3>Cloud Mail</h3>
+        <p>一个持续打磨中的邮件项目，关注网页端与 Android 端的体验和同步细节。</p>
+        <span class="project-more">打开项目 ↗</span>
+      </a>
+      <a class="project" href="https://github.com/xxxooooxxx" target="_blank" rel="noopener noreferrer">
+        <div class="project-top"><span class="project-no">02 / OPEN SOURCE</span><span class="project-arrow">↗</span></div>
+        <h3>代码与实验</h3>
+        <p>Web、Android、自托管与网络工具方面的项目和技术尝试。</p>
+        <span class="project-more">浏览 GitHub ↗</span>
+      </a>
+    </div>
+  </section>
+
+  <section class="block">
+    <div class="sec-head"><span class="no">04</span><h2>读到的句子</h2></div>
     <div class="quote" id="quoteCard">
       <p id="qtext"></p>
       <div class="from" id="qfrom"></div>
@@ -156,7 +192,7 @@
   </section>
 
   <section class="block">
-    <div class="sec-head"><span class="no">04</span><h2>接花瓣 · 三十秒</h2></div>
+    <div class="sec-head"><span class="no">05</span><h2>接花瓣 · 三十秒</h2></div>
     <canvas id="game"></canvas>
     <div class="game-bar">
       <div class="score"><b id="gscore">0</b> <small>得点 · 最佳 <span id="gbest">0</span></small></div>
@@ -168,7 +204,7 @@
   <footer>
     <span>© 2026 LYRNOX</span>
     <span class="mk">花信</span>
-    <span>SET IN SONGTI</span>
+    <span>A LITTLE SPACE ON THE INTERNET</span>
   </footer>
 </main>
 
@@ -233,29 +269,7 @@ document.querySelectorAll('section.block').forEach(s =>
   upd(); setInterval(upd, 1000);
 })();
 
-/* 呼吸 */
-(function(){
-  const ring = document.getElementById('ring'), phase = document.getElementById('phase'),
-        btn = document.getElementById('breathBtn'), round = document.getElementById('round');
-  const seq = [['吸', 4000, 1.45, ''], ['屏息', 4000, 1.45, 'hold'], ['呼', 6000, 1, '']];
-  let timers = [], on = false, n = 0;
-  const clear = () => { timers.forEach(clearTimeout); timers = []; };
-  function stop(){
-    clear(); on = false; n = 0;
-    ring.style.transform = 'scale(1)'; ring.className = 'ring';
-    phase.textContent = '预备'; round.textContent = ''; btn.textContent = '开始呼吸';
-  }
-  function cycle(i){
-    if (!on) return;
-    if (i % 3 === 0){ n++; round.textContent = '第 ' + n + ' 轮'; }
-    const [label, ms, s, cls] = seq[i % 3];
-    phase.textContent = label; ring.className = 'ring ' + cls;
-    ring.style.transition = 'transform ' + ms + 'ms cubic-bezier(.4,0,.2,1), border-color .8s';
-    requestAnimationFrame(() => ring.style.transform = 'scale(' + s + ')');
-    timers.push(setTimeout(() => cycle(i + 1), ms));
-  }
-  btn.onclick = () => on ? stop() : (on = true, btn.textContent = '停下', cycle(0));
-})();
+/* 关于与项目为静态内容，无需额外脚本 */
 
 /* 一言 */
 (function(){
