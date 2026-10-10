@@ -3,186 +3,262 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="theme-color" content="#faf8f3">
-<meta name="description" content="一枝樱 — 留白">
-<title>lyrnox · 一枝樱</title>
+<meta name="theme-color" content="#fbfaf7">
+<meta name="description" content="藤 — 一棵挂在网上的日本紫藤">
+<title>lyrnox · 藤</title>
 <link rel="icon" href="/favicon.svg" type="image/svg+xml">
 <style>
-  :root{
-    --paper:#faf8f3; --ink:#2b2b33; --muted:#98917f;
-    --serif:"Songti SC","STSong","Noto Serif CJK SC",Georgia,serif;
-    --sans:-apple-system,BlinkMacSystemFont,"PingFang SC","Hiragino Sans GB","Microsoft YaHei",sans-serif;
-  }
-  *{margin:0; padding:0; box-sizing:border-box}
-  html,body{height:100%; overflow:hidden; background:var(--paper)}
-  body{font-family:var(--sans); color:var(--ink); -webkit-font-smoothing:antialiased;
-    animation:enter 2s ease both}
+  *{margin:0;padding:0;box-sizing:border-box}
+  html,body{height:100%;overflow:hidden;background:#fbfaf7}
+  body{font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Hiragino Sans GB","Microsoft YaHei",sans-serif;
+    -webkit-font-smoothing:antialiased; animation:enter 2.2s ease both}
   @keyframes enter{from{opacity:0} to{opacity:1}}
-
-  .paper{position:fixed; inset:0; z-index:0; pointer-events:none; opacity:.05;
-    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)'/%3E%3C/svg%3E")}
-
-  .mark{position:fixed; z-index:3; left:50%; top:44%; transform:translate(-50%,-50%);
-    font-family:var(--serif); font-size:52vmin; line-height:1; color:var(--ink); opacity:.045;
-    pointer-events:none; user-select:none}
-
-  #branch{position:fixed; inset:0; z-index:1; width:100%; height:100%; display:block}
-  #branch .sway{transform-box:fill-box; transform-origin:82% 96%;
-    animation:sway 9s ease-in-out infinite}
-  @keyframes sway{0%,100%{transform:rotate(-.5deg)} 50%{transform:rotate(.7deg)}}
-
-  #petals{position:fixed; inset:0; z-index:2; pointer-events:none}
-
-  .top{position:fixed; z-index:4; top:26px; left:28px;
-    font-size:12px; letter-spacing:.42em; color:var(--ink)}
-  .top span{color:var(--muted); letter-spacing:.3em; margin-left:14px; font-size:10px}
-
-  .foot{position:fixed; z-index:4; left:28px; bottom:30px}
-  .foot h1{font-family:var(--serif); font-weight:400; font-size:30px; letter-spacing:.28em; margin-bottom:12px}
-  .foot p{font-size:10px; letter-spacing:.34em; color:var(--muted)}
-
-  .seal{position:fixed; z-index:4; right:28px; bottom:30px;
-    width:40px; height:40px; display:grid; place-items:center;
-    border:1px solid #cf6390; border-radius:5px; color:#cf6390;
-    font-family:var(--serif); font-size:19px; transform:rotate(-5deg); opacity:.85}
-
+  #t{position:fixed;inset:0;width:100%;height:100%;display:block}
+  .top{position:fixed;top:26px;left:28px;z-index:2;
+    font-size:12px;letter-spacing:.42em;color:#2b2b33}
+  .seal{position:fixed;right:28px;bottom:28px;z-index:2;
+    width:38px;height:38px;display:grid;place-items:center;
+    border:1px solid #7b5fc0;border-radius:5px;color:#7b5fc0;
+    font-family:"Songti SC","STSong",serif;font-size:18px;
+    transform:rotate(-5deg);opacity:.8}
   @media (prefers-reduced-motion: reduce){
-    #branch .sway{animation:none}
-    #petals{display:none}
     body{animation:none}
   }
 </style>
 </head>
 <body>
-<div class="paper"></div>
-<div class="mark">桜</div>
-
-<svg id="branch" viewBox="0 0 800 1200" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
-  <defs>
-    <radialGradient id="petalG" cx="50%" cy="35%" r="78%">
-      <stop offset="0%" stop-color="#ffffff"/>
-      <stop offset="55%" stop-color="#ffe4ed"/>
-      <stop offset="100%" stop-color="#f4a8c4"/>
-    </radialGradient>
-    <radialGradient id="budG" cx="50%" cy="40%" r="72%">
-      <stop offset="0%" stop-color="#ffd9e6"/>
-      <stop offset="100%" stop-color="#ec8cae"/>
-    </radialGradient>
-    <g id="blossom">
-      <g>
-        <ellipse cx="0" cy="-14" rx="12" ry="16" fill="url(#petalG)"/>
-        <ellipse cx="0" cy="-14" rx="12" ry="16" fill="url(#petalG)" transform="rotate(72)"/>
-        <ellipse cx="0" cy="-14" rx="12" ry="16" fill="url(#petalG)" transform="rotate(144)"/>
-        <ellipse cx="0" cy="-14" rx="12" ry="16" fill="url(#petalG)" transform="rotate(216)"/>
-        <ellipse cx="0" cy="-14" rx="12" ry="16" fill="url(#petalG)" transform="rotate(288)"/>
-      </g>
-      <g stroke="#d9a441" stroke-width="1.4" stroke-linecap="round">
-        <line x1="0" y1="3" x2="-4" y2="-8"/><line x1="0" y1="3" x2="4" y2="-8"/>
-        <line x1="0" y1="3" x2="-7" y2="-3"/><line x1="0" y1="3" x2="7" y2="-3"/>
-        <line x1="0" y1="3" x2="0" y2="-10"/>
-      </g>
-      <circle cx="0" cy="-9" r="2.6" fill="#f2c14e"/>
-      <circle cx="-4" cy="-7" r="1.7" fill="#f6cf6b"/>
-      <circle cx="4" cy="-7" r="1.7" fill="#f6cf6b"/>
-    </g>
-    <g id="bud">
-      <ellipse cx="0" cy="0" rx="7" ry="10" fill="url(#budG)"/>
-      <path d="M-7 3 Q0 9 7 3" stroke="#c9759a" stroke-width="1.5" fill="none" stroke-linecap="round"/>
-    </g>
-  </defs>
-  <g class="sway" stroke="#453a32" stroke-linecap="round" fill="none">
-    <path d="M730 1190 C660 1020 580 900 480 760" stroke-width="17"/>
-    <path d="M480 760 C410 640 350 540 310 420" stroke-width="10"/>
-    <path d="M480 760 C560 660 610 580 645 460" stroke-width="8"/>
-    <path d="M395 585 C330 530 270 490 205 455" stroke-width="6"/>
-    <path d="M560 640 C600 610 630 590 655 560" stroke-width="4"/>
-    <path d="M340 480 C300 450 270 430 245 400" stroke-width="4"/>
-    <path d="M610 520 C640 500 660 485 675 465" stroke-width="3.5"/>
-  </g>
-  <g class="sway">
-    <use href="#blossom" transform="translate(310 420) rotate(10) scale(1.7)"/>
-    <use href="#blossom" transform="translate(255 475) rotate(-20) scale(1.15)"/>
-    <use href="#blossom" transform="translate(365 375) rotate(30) scale(1.0)"/>
-    <use href="#blossom" transform="translate(645 460) rotate(-15) scale(1.6)"/>
-    <use href="#blossom" transform="translate(600 525) rotate(40) scale(1.1)"/>
-    <use href="#blossom" transform="translate(205 455) rotate(0) scale(1.35)"/>
-    <use href="#blossom" transform="translate(480 760) rotate(-30) scale(1.2)"/>
-    <use href="#blossom" transform="translate(545 685) rotate(15) scale(0.9)"/>
-    <use href="#blossom" transform="translate(430 800) rotate(50) scale(0.85)"/>
-    <use href="#bud" transform="translate(580 605) rotate(20)"/>
-    <use href="#bud" transform="translate(420 505) rotate(-30) scale(1.1)"/>
-    <use href="#bud" transform="translate(250 525) rotate(10) scale(0.9)"/>
-    <use href="#bud" transform="translate(675 525) rotate(-10)"/>
-    <use href="#bud" transform="translate(330 350) rotate(30) scale(1.05)"/>
-    <use href="#bud" transform="translate(690 480) rotate(-40) scale(0.85)"/>
-  </g>
-</svg>
-
-<canvas id="petals"></canvas>
-
-<header class="top">lyrnox<span>EST. 2026</span></header>
-<footer class="foot">
-  <h1>一枝樱</h1>
-  <p>ONE BRANCH, ENOUGH SPRING</p>
-</footer>
-<div class="seal">桜</div>
-
+<canvas id="t"></canvas>
+<div class="top">lyrnox</div>
+<div class="seal">藤</div>
 <script>
 "use strict";
-(function(){
-  if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-  const cv = document.getElementById('petals'), ctx = cv.getContext('2d');
-  const dpr = Math.min(devicePixelRatio || 1, 2);
-  let W, H;
-  function size(){
-    W = innerWidth; H = innerHeight;
-    cv.width = W * dpr; cv.height = H * dpr;
-    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-  }
-  size(); addEventListener('resize', size);
+/* ============ 日本紫藤 ============ */
+const SEED = 20261010;
+function mulberry32(a){
+  return function(){
+    a |= 0; a = a + 0x6D2B79F5 | 0;
+    let t = Math.imul(a ^ a >>> 15, 1 | a);
+    t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t;
+    return ((t ^ t >>> 14) >>> 0) / 4294967296;
+  };
+}
+const rnd = mulberry32(SEED);
+const R = (a, b) => a + rnd() * (b - a);
+const TAU = Math.PI * 2;
 
-  const rnd = (a, b) => a + Math.random() * (b - a);
-  const tones = ['255,255,255', '255,217,230', '244,168,196'];
-  let ps = [], lastSpawn = 0, last = 0, running = true;
-  document.addEventListener('visibilitychange', () => { running = !document.hidden; });
+const cv = document.getElementById('t'), ctx = cv.getContext('2d');
+const dpr = Math.min(devicePixelRatio || 1, 2);
+let W, H;
+function size(){
+  W = innerWidth; H = innerHeight;
+  cv.width = W * dpr; cv.height = H * dpr;
+  ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+}
 
-  function spawn(now){
-    if (ps.length >= 14 || now - lastSpawn < 2200) return;
-    lastSpawn = now;
-    ps.push({
-      x: rnd(W * .1, W * .9), y: -20,
-      s: rnd(4, 9), vy: rnd(22, 46), ph: rnd(0, 6.28), sw: rnd(.5, 1.3),
-      rot: rnd(0, 6.28), vr: rnd(-1, 1),
-      c: tones[Math.random() * tones.length | 0], a: 0,
-    });
+/* ---------- 结构生成 ---------- */
+const branches = [];
+const clusters = [];
+const leafAt = [];
+
+function genBranch(x, y, angle, len, wid, depth){
+  const pts = [[x, y]];
+  let cx = x, cy = y, ca = angle;
+  const segs = 4, bend = depth >= 4 ? 0.62 : 0.42;
+  for (let i = 0; i < segs; i++){
+    ca += (rnd() - 0.5) * bend;
+    ca = ca * 0.86 + (-Math.PI / 2) * 0.14;
+    const sl = len / segs;
+    cx += Math.cos(ca) * sl; cy += Math.sin(ca) * sl;
+    pts.push([cx, cy]);
   }
-  function frame(now){
-    requestAnimationFrame(frame);
-    if (!running) return;
-    const dt = Math.min((now - last) / 1000 || 0, .05); last = now;
-    spawn(now);
-    ctx.clearRect(0, 0, W, H);
-    for (let i = ps.length - 1; i >= 0; i--){
-      const p = ps[i];
-      p.y += p.vy * dt; p.ph += dt * 1.2; p.rot += p.vr * dt;
-      p.x += Math.sin(p.ph) * p.sw * 26 * dt;
-      p.a = Math.min(.85, p.a + dt * .8);
-      if (p.y > H * .75) p.a = Math.max(0, p.a - dt * 1.2);
-      if (p.y > H + 24 || p.a <= 0 && p.y > H * .75){ ps.splice(i, 1); continue; }
-      ctx.save();
-      ctx.translate(p.x, p.y); ctx.rotate(p.rot);
-      ctx.fillStyle = `rgba(${p.c},${p.a.toFixed(3)})`;
-      const s = p.s;
-      ctx.beginPath();
-      ctx.moveTo(0, -s);
-      ctx.bezierCurveTo(s * .9, -s * .6, s * .9, s * .5, 0, s);
-      ctx.bezierCurveTo(-s * .9, s * .5, -s * .9, -s * .6, 0, -s);
-      ctx.fill();
-      ctx.restore();
+  branches.push({ pts, w0: wid, w1: Math.max(wid * 0.6, 0.8), depth });
+  const tip = pts[pts.length - 1];
+
+  if (depth <= 0 || wid < 1.4){
+    if (rnd() < 0.8) addCluster(tip[0], tip[1]);
+    else leafAt.push({ x: tip[0], y: tip[1], angle: ca, s: R(0.7, 1) });
+    return;
+  }
+  if (depth <= 2){
+    const n = depth === 2 ? 2 : 1;
+    for (let i = 0; i < n; i++){
+      const p = pts[1 + Math.floor(rnd() * (pts.length - 1))];
+      if (rnd() < 0.75) addCluster(p[0], p[1]);
+    }
+    if (rnd() < 0.5) leafAt.push({ x: tip[0], y: tip[1], angle: ca, s: R(0.6, 1) });
+  }
+  const kids = depth >= 4 ? 3 : 2;
+  for (let k = 0; k < kids; k++){
+    const na = ca + (rnd() - 0.5) * 1.05 + (k - (kids - 1) / 2) * 0.55;
+    genBranch(cx, cy, na, len * R(0.6, 0.76), wid * 0.6, depth - 1);
+  }
+}
+
+/* ---------- 花穗(总状花序)精灵 ---------- */
+function lerpC(c1, c2, t){
+  return [0, 1, 2].map(i => Math.round(c1[i] + (c2[i] - c1[i]) * t));
+}
+function addCluster(x, y){
+  if (clusters.length > 85) return;
+  const len = R(70, 175);
+  const maxW = R(15, 24);
+  const variant = rnd();
+  const top = variant < 0.7 ? [95, 67, 152] : variant < 0.9 ? [122, 96, 178] : [196, 130, 170];
+  const tip = variant < 0.7 ? [226, 208, 242] : variant < 0.9 ? [232, 220, 246] : [248, 228, 238];
+  const pad = 26, cw = (maxW + pad) * 2, ch = len + pad * 2;
+  const c = document.createElement('canvas');
+  c.width = cw * dpr; c.height = ch * dpr;
+  const g = c.getContext('2d');
+  g.setTransform(dpr, 0, 0, dpr, 0, 0);
+  const ox = cw / 2, oy = pad;
+  g.strokeStyle = 'rgba(110,105,80,.55)'; g.lineWidth = 1.6;
+  g.beginPath(); g.moveTo(ox, oy - 6); g.lineTo(ox, oy + len); g.stroke();
+  const n = Math.floor(len / 3.1);
+  for (let i = 0; i < n; i++){
+    const t = i / n;
+    const wprof = Math.pow(Math.sin(Math.PI * Math.min(t * 1.12, 1)), 0.75);
+    const spread = maxW * wprof;
+    const fy = oy + t * len + R(-2, 2);
+    const fx = ox + R(-1, 1) * spread;
+    const s = R(2.6, 4.6) * (1 - t * 0.35);
+    const col = lerpC(top, tip, Math.min(t * 1.1, 1));
+    const jitter = R(-14, 14);
+    g.fillStyle = `rgba(${col[0] + jitter | 0},${col[1] + jitter | 0},${col[2] + jitter | 0},${R(.82, 1).toFixed(2)})`;
+    g.beginPath();
+    g.ellipse(fx, fy, s, s * 0.78, R(0, TAU), 0, TAU);
+    g.fill();
+    if (rnd() < 0.4){
+      g.fillStyle = 'rgba(255,240,180,.8)';
+      g.beginPath(); g.arc(fx, fy, s * 0.28, 0, TAU); g.fill();
     }
   }
+  clusters.push({
+    x, y, sprite: c, sw: cw, sh: ch,
+    phase: R(0, TAU), speed: R(0.5, 0.9), amp: R(0.035, 0.085),
+  });
+}
+
+/* ---------- 羽状复叶精灵 ---------- */
+function leafSpray(){
+  const c = document.createElement('canvas');
+  const s = 90;
+  c.width = s * dpr; c.height = s * dpr;
+  const g = c.getContext('2d');
+  g.setTransform(dpr, 0, 0, dpr, 0, 0);
+  g.translate(s / 2, s / 2);
+  g.strokeStyle = 'rgba(105,125,90,.8)'; g.lineWidth = 1.6;
+  g.beginPath(); g.moveTo(0, 0); g.lineTo(0, -34); g.stroke();
+  for (let i = 0; i < 5; i++){
+    const t = i / 4, y = -6 - t * 26, w = 13 * (1 - t * 0.45);
+    for (const dir of [-1, 1]){
+      g.fillStyle = `rgba(${118 + R(-12, 12) | 0},${150 + R(-12, 12) | 0},${104 + R(-10, 10) | 0},.92)`;
+      g.beginPath();
+      g.ellipse(dir * w * 0.62, y, w * 0.62, w * 0.3, dir * 0.5, 0, TAU);
+      g.fill();
+    }
+  }
+  g.fillStyle = 'rgba(120,152,106,.95)';
+  g.beginPath(); g.ellipse(0, -36, 5.5, 3.4, 0, 0, TAU); g.fill();
+  return c;
+}
+const leafImg = leafSpray();
+
+/* ---------- 木质部预渲染 ---------- */
+const wood = document.createElement('canvas');
+function renderWood(){
+  wood.width = W * dpr; wood.height = H * dpr;
+  const g = wood.getContext('2d');
+  g.setTransform(dpr, 0, 0, dpr, 0, 0);
+  g.lineCap = 'round'; g.lineJoin = 'round';
+  for (const b of branches){
+    const n = b.pts.length - 1;
+    for (let i = 0; i < n; i++){
+      const w = b.w0 + (b.w1 - b.w0) * (i / n);
+      const shade = 66 + (b.depth * 4) % 14;
+      g.strokeStyle = `rgb(${shade + 8},${shade - 2},${shade - 12})`;
+      g.lineWidth = w;
+      g.beginPath();
+      g.moveTo(b.pts[i][0], b.pts[i][1]);
+      g.lineTo(b.pts[i + 1][0], b.pts[i + 1][1]);
+      g.stroke();
+    }
+  }
+  const bx = W * 0.5;
+  g.strokeStyle = 'rgb(70,60,50)'; g.lineWidth = 30;
+  g.beginPath(); g.moveTo(bx, H + 30); g.lineTo(bx, H - 26); g.stroke();
+  for (const l of leafAt){
+    g.save();
+    g.translate(l.x, l.y); g.rotate(l.angle + Math.PI / 2 + R(-0.5, 0.5));
+    const s = 44 * l.s;
+    g.drawImage(leafImg, -s / 2, -s, s, s);
+    g.restore();
+  }
+}
+
+/* ---------- 落花 ---------- */
+let petals = [];
+function spawnPetal(){
+  if (petals.length > 10 || clusters.length === 0) return;
+  const c = clusters[Math.floor(rnd() * clusters.length)];
+  petals.push({
+    x: c.x + R(-14, 14), y: c.y + R(20, c.sh * 0.5),
+    s: R(2.5, 4.5), vy: R(24, 48), ph: R(0, TAU), sw: R(.5, 1.2),
+    rot: R(0, TAU), vr: R(-1.5, 1.5), a: 0,
+    col: [R(120, 160) | 0, R(95, 130) | 0, R(170, 200) | 0],
+  });
+}
+
+/* ---------- 主循环 ---------- */
+let last = 0, running = true, acc = 0;
+document.addEventListener('visibilitychange', () => { running = !document.hidden; });
+
+function frame(now){
+  requestAnimationFrame(frame);
+  if (!running) return;
+  const dt = Math.min((now - last) / 1000 || 0, 0.05); last = now;
+  ctx.clearRect(0, 0, W, H);
+  ctx.drawImage(wood, 0, 0, W, H);
+  for (const c of clusters){
+    const ang = Math.sin(now * 0.001 * c.speed + c.phase) * c.amp;
+    ctx.save();
+    ctx.translate(c.x, c.y); ctx.rotate(ang);
+    ctx.drawImage(c.sprite, -c.sw / 2, -8, c.sw, c.sh);
+    ctx.restore();
+  }
+  acc += dt;
+  if (acc > 1.4){ acc = 0; spawnPetal(); }
+  for (let i = petals.length - 1; i >= 0; i--){
+    const p = petals[i];
+    p.y += p.vy * dt; p.ph += dt * 1.3; p.rot += p.vr * dt;
+    p.x += Math.sin(p.ph) * p.sw * 24 * dt;
+    p.a = Math.min(.9, p.a + dt);
+    if (p.y > H * .92) p.a -= dt * 2;
+    if (p.a <= 0 && p.y > H * .9){ petals.splice(i, 1); continue; }
+    ctx.save();
+    ctx.translate(p.x, p.y); ctx.rotate(p.rot);
+    ctx.fillStyle = `rgba(${p.col[0]},${p.col[1]},${p.col[2]},${Math.max(p.a, 0).toFixed(2)})`;
+    ctx.beginPath();
+    ctx.ellipse(0, 0, p.s, p.s * 0.7, 0, 0, TAU);
+    ctx.fill();
+    ctx.restore();
+  }
+}
+
+function build(){
+  size();
+  branches.length = 0; clusters.length = 0; leafAt.length = 0; petals = [];
+  const bx = W * 0.5;
+  genBranch(bx + R(-8, 8), H + 40, -Math.PI / 2 + R(-0.06, 0.06), H * 0.24, 30, 5);
+  renderWood();
+}
+build();
+addEventListener('resize', build);
+if (matchMedia('(prefers-reduced-motion: reduce)').matches){
+  ctx.drawImage(wood, 0, 0, W, H);
+  for (const c of clusters) ctx.drawImage(c.sprite, c.x - c.sw / 2, c.y - 8, c.sw, c.sh);
+} else {
   requestAnimationFrame(n => { last = n; requestAnimationFrame(frame); });
-})();
+}
 </script>
 </body>
 </html>

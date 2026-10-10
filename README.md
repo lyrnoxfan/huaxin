@@ -1,6 +1,6 @@
-# 一枝樱 · huaxin
+# 藤 · huaxin
 
-lyrnox.com 的视觉小站源码（「lyrnox · 一枝樱」—— 留白），纯静态，CSS/JS 全内联、零外部资源，部署在 Cloudflare Workers（静态资源模式），服务名 `home`。
+lyrnox.com 的视觉小站源码（「lyrnox · 藤」—— 一棵挂在网上的日本紫藤），纯静态，CSS/JS 全内联、零外部资源，部署在 Cloudflare Workers（静态资源模式），服务名 `home`。
 
 ## 目录
 
