@@ -7,3 +7,4 @@ worker-old-20261009.js
 backup-20261009-homepage.html
 huaxin-source.zip
 __pycache__/
+.bridge-deploy.py
